@@ -1,0 +1,35 @@
+{% extends 'student/base.html' %}
+
+
+{% block content %}
+
+    <ul>
+        {% for x in q1 %}
+        <li>{{x.studentId}} , {{x.customerName}}</li>
+        {% endfor %}
+    </ul>
+
+<h2>{{q2}}</h2>
+
+<h2>{{q4}}</h2>
+<ul>
+    {% for x in q3 %}
+    <li>{{x.studentId}} {{x.customerName}}</li>
+    {% endfor %}
+</ul>
+
+<ul>
+    {% for x in q4 %}
+    <li>Student Name : {{x.customerName}} , Total Check In : {{x.count}}</li>
+    {% endfor %}
+</ul>
+
+<ul>
+    {% for x in lastLogin %}
+    <li>{{x}}</li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}
+

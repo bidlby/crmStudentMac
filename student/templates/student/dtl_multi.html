@@ -1,0 +1,144 @@
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="{% static 'student/123.jpeg' %}"><span class="font-weight-bold"><h3>{{data.customerName}}</h3></span>
+                <span class="text-black-50">{{data.leadsLocation}}</span><span> </span>
+                <span class="text-black-50">{{data.leadeAge}}</span>
+                <span class="text-black-50">{{data.Nationality}}</span>
+                <span class="text-black-50">{{data.emailAddress}}</span>
+                <span class="text-black-50">{{data.intersetList}}</span>
+                <br>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Assign Package
+                </button>
+
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h1 class="text-right">{{data.customerName}}</h1>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">Customer Name</label><div class="form-control">{{data.customerName}}</div></div>
+                    <div class="col-md-6"><label class="labels">Intrest In ?</label><input type="text" class="form-control" value="{{data.intersetList}}" placeholder="{{data.intersetIn}}"></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value="{{data.leadsContactNumber}}"> <br></div>
+                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="form-control" placeholder="enter address line 1" value="{{data.leadsLocation}}"> <br></div> <br>
+                    <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value="{{data.emailAddress}}"> <br></div> <br>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value="{{data.Nationality}}"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div class="col-md-12"><label class="labels">First Check In</label><input type="text" class="form-control" placeholder="experience" value="{{xx.checkInDate}}"></div> <br>
+                <div class="col-md-12"><label class="labels">Last Check In</label><input type="text" class="form-control" placeholder="additional details" value="{{aa.checkInDate}}"></div> <br>
+                <div class="col-md-12"><label class="labels">Total Classes</label><input type="text" class="form-control" placeholder="additional details" value="{{x1}}"></div> <br>
+                <div class="col-md-12"><label class="labels">Total Attendance</label><input type="text" class="form-control" placeholder="additional details" value="{{x2}}"></div><br>
+                <div class="col-md-12"><label class="labels">Remaning Classes</label><input type="text" class="form-control" placeholder="additional details" value="{{final}}"></div> 
+
+
+            </div>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Package Name</th>
+            <th scope="col">Purchase Date</th>
+            <th scope="col">End Date</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for x in packA %}
+          <tr>
+            <td>{{x.packageName}}</td>
+            <td>{{x.startDate}}</td>
+            <td>{{x.endDate}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+</div>
+</div>
+</div>
+
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+    <div class="container">
+        <h3>customer Name : {{data.customerName}}</h3>
+        <h3>total Check In {{bees}}</h3>
+        <h3>first check in was in : {{xx.checkInDate}}</h3>
+        <h3>last check in was in : {{aa.checkInDate}}</h3>
+        <h3>{{cc.days}} days</h3>
+        <h3>{{mm}}</h3>
+        <h3>{{test}}</h3>
+
+        {% for q in vv2 %}
+
+            {{ q.maxdate }}
+
+            {% endfor %}
+
+            {% for q in sql %}
+
+            <li><h1>{{ q.total }} SQL dtl_mutl.html</h1></li>
+
+            {% endfor %}
+
+            {{idfilter}} as id filter
+    </div>
+
+    {% for x in activePackage %}
+
+    <li>{{ x.PKGName }} , total leassons {{x.totalLessons}}</li>
+
+    {% endfor %}
+
+    {% for x in totalClass %}
+
+    <li>{{ x.totalLessons }} total class</li>
+
+    {% endfor %}
+
+    
+
+    {% for x in remaingclass %}
+
+    <li> total check in  {{x.total}} as final</li>
+
+    {% endfor %}
+
+
+    {% for x in xxc %}
+
+    <li> {{x.total}}as final</li>
+
+    {% endfor %}
+
+
+{{qwe}} total lessones 
+<br>
+{{qwe2}} total check IN
+
+
+ 
+
+{% endblock %}

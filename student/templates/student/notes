@@ -1,0 +1,21 @@
+
+
+CREATE VIEW [customerPerformance]
+AS
+SELECT a.studentId ,
+       a.customerName,
+       d.countryList , 
+       c.sourceChannel , 
+       count(DISTINCT b.checkInSeq) as total_checkIn
+         FROM student_customerInfo a ,
+              student_checkInData b ,
+              student_leadSource c,
+              student_countryList d
+where a.studentId = b.studentId
+and a.leadsChannel_id  = c.id
+and a.Nationality_id = d.id
+group by a.studentId ,
+       a.customerName,
+       d.countryList , 
+       c.sourceChannel 
+

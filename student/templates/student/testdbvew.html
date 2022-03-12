@@ -1,0 +1,55 @@
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container">
+<br>
+<h1>{{cur_date}}</h1>
+
+<br>
+<h2>Yesterday check in </h2>
+{% for x in a %}
+<li>{{x.checkInDate}} ----- {{x.total_checkIn}}</li>
+{% endfor %}
+
+<br>
+<h2>All check in</h2>
+{% for x in b %}
+<li>{{x.checkInDate}} ----- {{x.total_checkIn}}</li>
+{% endfor %}
+
+</div>
+
+
+<div class="container">
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">{{cur_name_month|date:"F" }} / {{cur_name_month.year }} / Day</th>
+        {% for x in b %}
+        <th scope="col">{{x.checkInDate.day}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Total Check In</td>
+        {% for x in b %}
+        <th scope="row">{{x.total_checkIn}}</th>
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+{% for x in newView %}
+<li>{{x}}</li>
+{% endfor %}
+
+
+
+{% endblock %}

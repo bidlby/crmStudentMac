@@ -1,0 +1,22 @@
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+
+
+{% block content %}
+<br>
+<div class="container"> 
+    <h1>Create New Package ? </h1>
+</div>
+<br>
+
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary my-4" type="submit">Submit</button>
+    </form>
+</div>
+
+{% endblock  %}

@@ -1,0 +1,12 @@
+.myform{
+    border: 5px dashed red;
+}
+
+h1 {
+    color: rgb(231, 233, 129);
+}
+
+h2 {
+    color: rgb(88, 175, 99);
+    border-radius: 2;
+}

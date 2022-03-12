@@ -1,0 +1,37 @@
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+
+{% block content %}
+
+    
+    {% if searched %}
+
+<div class="container">
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Lead Channel</th>
+        <th scope="col">Urgent ? </th>
+      </tr>
+    </thead>
+    {% for x in filter %}
+    <tbody>
+      <tr>
+        <th scope="row"><a href="/dashBoard/{{x.studentId}}">{{x.studentId}} </th></a>
+        <td>{{x.customerName}} </td>
+        <td>{{x.leadsChannel}}</td>
+        <td>{{x.leadsUrgent}}</td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+</div>
+
+{% else %}
+<h1>no search yet</h1>
+{% endif %}
+{% endblock %}

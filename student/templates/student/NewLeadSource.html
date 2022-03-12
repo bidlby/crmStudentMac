@@ -1,0 +1,33 @@
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+
+
+{% block content %}
+
+<br>
+<div class="container">
+    <h4>Current Lead Source:</h4>
+    {% for x in queryset %}
+    <li>{{x.sourceChannel}}</li>
+    {% endfor %}
+</div>
+
+<br>
+<br>
+
+<div class="container">
+<h4>Add New Lead Source: </h4>
+</div>
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary my-4" type="submit">Submit</button>
+    </form>
+</div>
+
+
+
+{% endblock  %}

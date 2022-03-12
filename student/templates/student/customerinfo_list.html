@@ -1,0 +1,41 @@
+{% extends 'student/base.html' %}
+
+{% block content %}
+
+
+
+    <div class="container">
+
+      <br>
+      <h2>Active Student List</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Customer Name</th>
+      <th scope="col">Lead Channel</th>
+      <th scope="col">Urgent ??? </th>
+      <th scope="col">Assign Package</th>
+      <th scope="col">Edit Info</th>
+    </tr>
+  </thead>
+  {% for x in object_list %}
+  <tbody>
+    <tr>
+      <th scope="row"><a href="/student/dashBoard/{{x.studentId}}">{{x.studentId}} </th></a>
+      <td>{{x.customerName}} </td>
+      <td>{{x.leadsChannel}}</td>
+      <td>{{x.leadsUrgent}}</td>
+      <td><button class="btn-white"> <a href="assignPKG/{{x.studentId}}">Assign Package</a></button></td>
+      <td><button class="btn-white"> <a href="updateView/{{x.studentId}}">Edit Info</a></button></td>
+    </tr>
+  </tbody>
+  {% endfor %}
+</table>
+
+{% endblock %}
+
+
+
+</div>
