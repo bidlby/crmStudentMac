@@ -19,3 +19,11 @@ group by a.studentId ,
        d.countryList , 
        c.sourceChannel 
 
+SELECT a.studentId ,
+       a.customerName,
+       b.transactiondate,
+       b.paymentamount,
+       b.currency
+         FROM student_customerInfo a ,
+               student_payments b
+where a.studentId = b.studentId_id
