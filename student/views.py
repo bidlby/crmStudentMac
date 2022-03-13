@@ -11,7 +11,7 @@ from rest_framework import generics
 from django.views.generic import DetailView, UpdateView , ListView , TemplateView , CreateView
 from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount
 from .serializer import customerSerial 
-from django.db.models import Count , Max , F , Min , Q
+from django.db.models import Count , Max , F , Min , Q , Sum
 from django.db import connection
 from django.urls import reverse, reverse_lazy
 import datetime 
@@ -20,6 +20,7 @@ from django.db.models.functions import Extract
 from django.shortcuts import get_object_or_404  
 from datetime import date, datetime, timedelta
 from django.utils.timezone import now
+import json
 
 from django.db import connection
 
@@ -303,13 +304,40 @@ def dbview(request):
 
 ## customer Account Balance 
 
-def customerSOA(request):
-    queryset = customerPaymentAccount.objects.all()
-    context = {'queryset':queryset}
-    return render(request,'student/soa.html',context)
+def customerSOASummary(request):
+    queryset1 = customerPaymentAccount.objects.all()
+    queryset = customerPaymentAccount.objects.values('customerName','studentId').annotate(credit = Sum('credit')).annotate(debit=Sum('debit')).annotate(openBalance=F('credit') - F('debit'))
+
+    TotalCredit = customerPaymentAccount.objects.aggregate(credits = Sum('credit'))
+    Totaldebit = customerPaymentAccount.objects.aggregate(debits = Sum('debit'))
+    TotalOpenAmount = customerPaymentAccount.objects.annotate(OpenAmount = F('credit') - F('debit'))
+
+    try:
+        openBalance = queryset['credit'] - queryset['debit']
+    except Exception as e:
+        openBalance = 0 
+    
+    try:
+        xxx = TotalOpenAmount['OpenAmount']
+    except Exception as e:
+        xxx = 'None'
+
+
+    context = {'queryset':queryset,'TotalCredit':TotalCredit,'Totaldebit':Totaldebit,'openAmount':openAmount,'TotalOpenAmount':TotalOpenAmount,'openBalance':openBalance,'xxx':xxx}
+    return render(request,'student/soa_summry.html',context)
 
 def customerSOA(request,pk):
     queryset = customerPaymentAccount.objects.filter(studentId = pk)
     customerName = customerInfo.objects.filter(studentId = pk)
-    context = {'queryset':queryset,'customerName':customerName}
+    totalCredit = customerPaymentAccount.objects.filter(studentId = pk).aggregate(credit = Sum('credit'))
+    totalDebit = customerPaymentAccount.objects.filter(studentId = pk).aggregate(debit = Sum('debit'))
+
+    try:
+        openBalance = totalCredit['credit'] - totalDebit['debit']
+    except Exception as e:
+        openBalance = 0 
+
+    
+    context = {'queryset':queryset,'customerName':customerName,
+               'openBalance':openBalance , 'totalCredit':totalCredit , 'totalDebit':totalDebit}
     return render(request,'student/soa.html',context)

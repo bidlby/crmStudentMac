@@ -41,5 +41,6 @@ urlpatterns = [
     path('list/updateView/<int:pk>',views.studentUpdateView.as_view(),name='updateView'),
     path('dbvew/',views.dbview,name='dbview'),
     path('ReportsLinks',views.ReportsLinks.as_view(),name='ReportsLinks'),
-    path('soa/<int:pk>',views.customerSOA,name='soa')
+    path('soa/<int:pk>',views.customerSOA,name='soa_PK'),
+    path('soa_group/',views.customerSOASummary,name='soa')
 ]
