@@ -40,5 +40,6 @@ urlpatterns = [
     path('newLeadSouce/',views.leadSouceView.as_view(),name='NewSource'),
     path('list/updateView/<int:pk>',views.studentUpdateView.as_view(),name='updateView'),
     path('dbvew/',views.dbview,name='dbview'),
-    path('ReportsLinks',views.ReportsLinks.as_view(),name='ReportsLinks')
+    path('ReportsLinks',views.ReportsLinks.as_view(),name='ReportsLinks'),
+    path('soa/<int:pk>',views.customerSOA,name='soa')
 ]

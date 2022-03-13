@@ -1,0 +1,41 @@
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+{% block content %}
+
+<br>
+<div class="container">
+    {% for x in customerName %}
+ <h2>Statment of Account Customer :  <h1>{{x.customerName}}</h1> </h2>
+    {% endfor %}
+    <br>
+</div>
+<table class="table container">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Transaction Date</th>
+        <th scope="col">Detailes </th>
+        <th scope="col">Ref </th>
+        <th scope="col">credit</th>
+        <th scope="col">Debit</th>
+      </tr>
+    </thead>
+    {% for x in queryset %}
+    <tbody>
+      <tr>
+        <th scope="row"><a href="/student/dashBoard/{{x.studentId}}">{{x.studentId}} </th></a>
+        <td>{{x.customerName}} </td>
+        <td>{{x.transactionDate}}</td>
+        <td>{{x.paymenttype}}</td>
+        <td>{{x.Payment_Ref}}</td>
+        <td>{{x.credit}}</td>
+        <td>{{x.debit}}</td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+
+{% endblock %}

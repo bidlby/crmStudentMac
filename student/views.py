@@ -9,7 +9,7 @@ from student.forms import newStudent , newCheckIn , derivePackageform , assignPK
 from django.contrib import messages
 from rest_framework import generics
 from django.views.generic import DetailView, UpdateView , ListView , TemplateView , CreateView
-from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance
+from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount
 from .serializer import customerSerial 
 from django.db.models import Count , Max , F , Min , Q
 from django.db import connection
@@ -300,3 +300,16 @@ def dbview(request):
 
     context = {'a':a,'b':b,'cur_date':cur_date,'cur_month':cur_month,'cur_name_month':cur_name_month,'newView':newView}
     return render(request,'student/testdbvew.html',context)
+
+## customer Account Balance 
+
+def customerSOA(request):
+    queryset = customerPaymentAccount.objects.all()
+    context = {'queryset':queryset}
+    return render(request,'student/soa.html',context)
+
+def customerSOA(request,pk):
+    queryset = customerPaymentAccount.objects.filter(studentId = pk)
+    customerName = customerInfo.objects.filter(studentId = pk)
+    context = {'queryset':queryset,'customerName':customerName}
+    return render(request,'student/soa.html',context)
