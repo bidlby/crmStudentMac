@@ -1,0 +1,11 @@
+## Customer Account Balance View
+
+
+CREATE VIEW [CustomerAccountBalance] as 
+select a.transactionDate , b.studentId , b.customerName ,  a.paymenttype ,  a.Payment_Ref , ' ' as credit ,  a.paymentAmount as debit  from student_customerspayments a , student_customerinfo b
+where a.StudentId_id = b.studentId
+union ALL
+SELECT   a.startDate ,  a.studentId_id , c.customerName,   b.PakageName , '', b.packagePrice as credit , '' as debit from student_assignpackage a , student_studiopackages b , student_customerinfo c
+where a.StudentId_id = 1
+and a.packageName_id = b.packageId
+and a.StudentId_id = c.studentId

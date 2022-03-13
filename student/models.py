@@ -137,15 +137,46 @@ class customerPerformance(models.Model):
 
     ## Payments ##
 
-class Payments(models.Model):
+class customersPayments(models.Model):
+
+   # Payment Choices
+   payType = [
+        ('Card', 'Card'),
+        ('Cash', 'Cash')
+        ]
+
    transactionId = models.AutoField(primary_key=True)
    StudentId = models.ForeignKey(customerInfo,max_length=20,on_delete=models.DO_NOTHING)
    Payment_Ref = models.CharField(max_length=200)
    transactionDate = models.DateField(default=datetime.now)
-   paymentMethod = models.Choices('Card','Cash')
+   paymenttype = models.CharField(max_length=50, choices = payType , default='Cash')
    paymentAmount = models.IntegerField()
    currency = models.CharField(max_length=20 , default='AED')
-   gbFlag = models.BooleanField(default=False)
+   GB1 = models.BooleanField(default=False)
 
    def __str__(self) -> str:
        return f"{self.transactionId} Trx ID, {self.StudentId} , {self.paymentAmount} , {self.transactionDate}"
+
+
+class customerPaymentAccount(models.Model):
+    transactionDate = models.DateField(editable=False)
+    studentId = models.IntegerField(editable=False , primary_key=True)
+    customerName = models.CharField(editable=False,max_length=100)
+    paymenttype = models.CharField(editable=False , max_length=50)
+    Payment_Ref = models.CharField(editable=False , max_length=200)
+    credit = models.IntegerField(editable=False)
+    debit = models.IntegerField(editable=False)
+
+    def save(self,*args,**kwargs):
+        raise NotSupportedError('this model view and cant be saved')
+
+    class Meta:
+       managed = False
+       db_table = 'CustomerAccountBalance'
+       verbose_name = 'CustomerAccountBalance'
+       verbose_name_plural = 'CustomerAccountBalances'
+       ordering = ['transactionDate']
+
+    def __str__(self) -> str:
+       return f"{self.studentId} , {self.customerName} , {self.transactionDate} , {self.paymenttype} "
+###

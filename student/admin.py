@@ -15,7 +15,8 @@ admin.site.register(models.courseList)
 admin.site.register(models.AssignPackage)
 admin.site.register(models.countryList)
 admin.site.register(models.checkInByDateModel)
-admin.site.register(models.Payments)
+admin.site.register(models.customersPayments)
+admin.site.register(models.customerPaymentAccount)
 
 
 
