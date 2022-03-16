@@ -18,6 +18,9 @@
       <th scope="col">Urgent ??? </th>
       <th scope="col">Assign Package</th>
       <th scope="col">Edit Info</th>
+      <th scope="col">Statment</th>
+      <th scope="col">Payment</th>
+
     </tr>
   </thead>
   {% for x in object_list %}
@@ -27,8 +30,12 @@
       <td>{{x.customerName}} </td>
       <td>{{x.leadsChannel}}</td>
       <td>{{x.leadsUrgent}}</td>
-      <td><button class="btn-white"> <a href="assignPKG/{{x.studentId}}">Assign Package</a></button></td>
-      <td><button class="btn-white"> <a href="updateView/{{x.studentId}}">Edit Info</a></button></td>
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:assignPKG' x.studentId %}'">Assign Package</button></td>
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:updateView' x.studentId %}'">Edit Info</button></td>
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:soa_PK' x.studentId %}'">Account</button></td>
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:AddPayment' x.studentId %}'">Add Payment</button></td>
+
+
     </tr>
   </tbody>
   {% endfor %}

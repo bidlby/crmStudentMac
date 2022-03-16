@@ -1,11 +1,12 @@
 
 from datetime import datetime
 from faulthandler import disable
+from multiprocessing.sharedctypes import Value
 from tkinter import Widget
-from turtle import textinput
+from turtle import textinput, width
 from django import forms
-from .models import customerInfo , checkInData  , studioPackages  , AssignPackage
-from django.forms import ModelForm, Textarea , TextInput 
+from .models import customerInfo , checkInData  , studioPackages  , AssignPackage , customersPayments
+from django.forms import ChoiceField, ModelForm, Textarea , TextInput 
 from django.contrib.admin.widgets import AdminDateWidget
 
 class newStudent(forms.ModelForm):
@@ -47,11 +48,41 @@ class derivePackageform(forms.ModelForm):
         model = studioPackages
         fields = '__all__'
         labels = {
-            'PakageName' : 'Package Name'
+            'courseName' : 'Course Name',
+            'group_age' : 'Group Age',
+            'numberOfLessons' : 'Total Lessons',
+            'packagePrice' : 'Package Price',
+            'PakageName' : 'Package Name',
             }
+
         widgets = {
-            'PakageName': TextInput(attrs={'placeholder': 'Package Name' , 'len' : '250' , 'class':'form-control'}),
+              'PakageName': TextInput(attrs={
+              'placeholder': 'Package Name' ,
+              'len' : '250' ,
+              'class':'form-control'
+              }),
+              'group_age' : forms.Select(attrs={
+                  'placeholder':'group Age',
+                  'class':'form-control',
+                  'style': 'width:16ch',
+              }),
+                  'courseName' : forms.Select(attrs={
+                  'placeholder':'Course Name',
+                  'class':'form-control',
+                  'style': 'width:16ch',
+              }),
+                  'numberOfLessons' : forms.NumberInput(attrs={
+                  'placeholder':'Total',
+                  'class':'form-control',
+                  'style': 'width:16ch',
+              }),
+                  'packagePrice' : forms.NumberInput(attrs={
+                  'placeholder':'Price',
+                  'class':'form-control',
+                  'style': 'width:16ch',
+              }),
             } 
+
 
 class assignPKGform(forms.ModelForm):
     #StudentId = forms.CharField(label=)
@@ -65,5 +96,25 @@ class assignPKGform(forms.ModelForm):
             'packageName': forms.Select(attrs={'placeholder': 'Package Name' , 'class':'form-control'}),
             'startDate': forms.DateInput(attrs={'class':'form-control'}),
             'endDate': forms.DateInput(attrs={'class':'form-control'}),
+            'StudentId':forms.Textarea(attrs={'hidden':'True'})
+        }
+
+class PaymentForm(forms.ModelForm):
+    #StudentId = forms.CharField(label=)
+    #customerName = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    class Meta:
+        model = customersPayments
+        fields = ('transactionId','StudentId','Payment_Ref','transactionDate','paymenttype','paymentAmount','currency')
+        labels = {'StudentId':''
+            }
+        widgets = {
+            'Payment_Ref': forms.TextInput(attrs={'placeholder': 'Payment Ref', 'class':'form-control'}),
+            'transactionDate': forms.DateInput(attrs={'class':'form-control'}),
+            'paymenttype': forms.Select(attrs={'class':'form-control'}),
+            'paymentAmount': forms.NumberInput(attrs={
+                'class' : 'form-control',
+                'id': 'number_field',
+                'style': 'width:16ch',
+                'placeholder':'Enter Amount'}),
             'StudentId':forms.Textarea(attrs={'hidden':'True'})
         }

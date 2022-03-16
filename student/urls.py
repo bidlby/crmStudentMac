@@ -33,6 +33,7 @@ urlpatterns = [
     path('successpage/',views.successpage,name='successpage'),
     path('dashBoard/<int:id>',views.detail_viewx),
     path('search',views.searchStudent,name='search'),
+    path('searchID',views.searchbyId,name='searchID'),
     path('new/',views.xx.as_view()),
     path('newPKG/',views.derivedPackage.as_view(),name='createPKG'),
     path('ageGroup/',views.createAgeList.as_view(),name='ageGroup'),
@@ -41,6 +42,8 @@ urlpatterns = [
     path('list/updateView/<int:pk>',views.studentUpdateView.as_view(),name='updateView'),
     path('dbvew/',views.dbview,name='dbview'),
     path('ReportsLinks',views.ReportsLinks.as_view(),name='ReportsLinks'),
-    path('soa/<int:pk>',views.customerSOA,name='soa_PK'),
-    path('soa_group/',views.customerSOASummary,name='soa')
+    path('list/soa/<int:pk>',views.customerSOA,name='soa_PK'),
+    path('soa_group/',views.customerSOASummary,name='soa'),
+    path('AddPayment/<int:pk>',views.CreatePayment.as_view(),name= 'AddPayment'),
+    path('CheckInByName',views.CheckInFormByName,name='CheckInByName')
 ]

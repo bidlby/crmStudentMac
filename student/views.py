@@ -1,15 +1,15 @@
 
 
 
-from tkinter.tix import COLUMN
-from urllib import request
+
+
 from django.shortcuts import redirect, render
 from student.models import customerInfo 
-from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform
+from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm
 from django.contrib import messages
 from rest_framework import generics
 from django.views.generic import DetailView, UpdateView , ListView , TemplateView , CreateView
-from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount
+from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount , customersPayments
 from .serializer import customerSerial 
 from django.db.models import Count , Max , F , Min , Q , Sum
 from django.db import connection
@@ -21,8 +21,8 @@ from django.shortcuts import get_object_or_404
 from datetime import date, datetime, timedelta
 from django.utils.timezone import now
 import json
-
 from django.db import connection
+
 
 
 
@@ -102,7 +102,25 @@ def successpage(request):
     return render(request,'student/checkInPassed.html')
 
         
+## check In by Name
+def CheckInFormByName(request):
+    if request.method == 'POST':
+        checkIn_form = newCheckIn(request.POST)
+        if checkIn_form.is_valid():
+            checkIn_form.save()
+            return redirect(reverse('student:successpage'))
+    else:
+        messages.error(request, 'Error saving form')
 
+    checkIn_form = newCheckIn()
+    Newcheck = checkInData.objects.all()
+    context = {'checkIn_form':checkIn_form,
+                'Newcheck':Newcheck}
+    #return redirect(request,'student/homePage.html')
+    return render(request,'student/checkInByName.html', context)
+
+def successpage(request):
+    return render(request,'student/checkInPassed.html')
 
 ##detailed View
 
@@ -201,10 +219,18 @@ def detail_viewx(request, id):
 def searchStudent(request):
     if request.method == "POST":
         searched = request.POST['searched']
-        customerfilter = customerInfo.objects.filter(Q(studentId__contains = searched)|Q(customerName__contains = searched))
+        customerfilter = customerInfo.objects.filter(Q(studentId = searched)|Q(customerName__contains = searched))
         return render(request,'student/student_search.html',{'searched':searched,'filter':customerfilter})
     else :
         return render(request,'student/student_search.html',{})
+
+def searchbyId(request):
+    if request.method == "POST":
+        searched = request.POST['searchID']
+        customerfilter = customerInfo.objects.filter(Q(studentId = searched))
+        return render(request,'student/SearchID.html',{'searchID':searched,'filter':customerfilter})
+    else :
+        return render(request,'student/SearchID.html',{})
 
 ### create view ###
 
@@ -221,10 +247,16 @@ class xx(CreateView):
 #### New Package Form
 
 class derivedPackage(CreateView):
+
+    queryset = studioPackages.objects.all()
+
     model = studioPackages
     form_class = derivePackageform
     #fields = '__all__'
+    initial = {'PakageName': ''}
     template_name = 'student/createPkg.html'
+    
+    
     
     def get_success_url(self):
         return reverse('student:home')
@@ -254,7 +286,31 @@ class leadSouceView(CreateView):
     def get_success_url(self):
         return reverse('home')
 
+### Payments :
 
+class CreatePayment(CreateView):
+    model = customersPayments
+    form_class = PaymentForm
+    #fields = '__all__'
+    template_name = 'student/AddPayment.html'
+
+    def get_initial(self):
+        StudentId = get_object_or_404(customerInfo, pk=self.kwargs['pk'])
+
+        return {
+        'StudentId': StudentId,
+        }  
+
+    def get_context_data(self, **kwargs):
+       context = super(CreatePayment, self).get_context_data(**kwargs)
+       context['queryset'] = customerInfo.objects.filter(pk=self.kwargs['pk'])
+       return context
+
+    def get_success_url(self):
+        return reverse('student:soa')
+
+
+## Assign Package:
 class assignPKG(CreateView):
     model = AssignPackage
     form_class = assignPKGform
@@ -306,7 +362,7 @@ def dbview(request):
 
 def customerSOASummary(request):
     queryset1 = customerPaymentAccount.objects.all()
-    queryset = customerPaymentAccount.objects.values('customerName','studentId').annotate(credit = Sum('credit')).annotate(debit=Sum('debit')).annotate(openBalance=F('credit') - F('debit'))
+    queryset = customerPaymentAccount.objects.values('customerName','studentId').annotate(credit = Sum('credit')).annotate(debit=Sum('debit')).annotate(openBalance=F('credit') - F('debit')).annotate(lastTrx = Max('transactionDate'))
 
     TotalCredit = customerPaymentAccount.objects.aggregate(credits = Sum('credit'))
     Totaldebit = customerPaymentAccount.objects.aggregate(debits = Sum('debit'))
@@ -323,7 +379,7 @@ def customerSOASummary(request):
         xxx = 'None'
 
 
-    context = {'queryset':queryset,'TotalCredit':TotalCredit,'Totaldebit':Totaldebit,'openAmount':openAmount,'TotalOpenAmount':TotalOpenAmount,'openBalance':openBalance,'xxx':xxx}
+    context = {'queryset':queryset,'TotalCredit':TotalCredit,'Totaldebit':Totaldebit,'TotalOpenAmount':TotalOpenAmount,'openBalance':openBalance,'xxx':xxx}
     return render(request,'student/soa_summry.html',context)
 
 def customerSOA(request,pk):
