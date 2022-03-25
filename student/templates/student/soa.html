@@ -15,9 +15,14 @@
     h4 { color: #ff245b; }
   </style>
  <h4>Total Open Amount : {{openBalance}}</h4>
-    {% endfor %}
+
     <br>
 </div>
+<div class="container">
+<button class="btn btn-lg btn-danger" onclick="location.href='{% url 'student:AddPayment' x.studentId %}'" > Make Payment</a></button>
+{% endfor %}
+</div>
+<br>
 <table class="table container">
     <thead>
       <tr>

@@ -19,7 +19,7 @@
               Add New ?
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="{% url 'student:createPKG' %}">New Package</a></li>
+              <li><a class="dropdown-item" href="{% url 'student:createPKG' %}">New / View Packages</a></li>
               <li><a class="dropdown-item" href="{% url 'student:ageGroup' %}">New Group Age</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{% url 'student:NewReg' %}">New Student</a></li>
@@ -42,7 +42,12 @@
         </ul>
         <form class="d-flex" method="POST" action="{% url 'student:search' %}">
           {% csrf_token %}
-          <input class="form-control me-2" type="search" placeholder="Search by ID" aria-label="Search" name="searched">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <form class="d-flex" method="POST" action="{% url 'student:searchID' %}">
+          {% csrf_token %}
+          <input class="form-control me-2" type="number" placeholder="Search by ID" aria-label="Search" name="searchID">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       </div>

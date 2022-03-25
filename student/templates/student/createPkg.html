@@ -6,12 +6,72 @@
 
 {% block content %}
 <br>
+
+<div class="container">
+
+    <h2>Current Packages</h2>
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Package ID</th>
+            <th scope="col">Package Name</th>
+            <th scope="col">Course Name</th>
+            <th scope="col">Group Age</th>
+            <th scope="col">Lessons </th>
+            <th scope="col">Package Price</th>
+
+      
+          </tr>
+        </thead>
+        {% for x in packages %}
+        <tbody>
+          <tr>
+            <th scope="row"><a href="/student/dashBoard/{{x.packageId}}">{{x.packageId}} </th></a>
+            <td>{{x.PakageName}}</td>
+            <td>{{x.courseName}}</td>
+            <td>{{x.group_age}}</td>
+            <td>{{x.numberOfLessons}}</td>
+            <td>{{x.packagePrice}}</td>
+            
+            
+        </tr>
+        </tbody>
+        {% endfor %}
+      </table>
+
+</div>
+
+<br>
 <div class="container"> 
-    <h1>Create New Package ? </h1>
+    
+    <h2>Create New Package ? </h2>
+</div>
+<br>
+<div class="container">
+<button class="btn btn-primary" onclick="myFunction()">New Package</button>
+<br>
 </div>
 <br>
 
-<div class="container">
+<script>
+    function myFunction() {
+  var x = document.getElementById("newPKG");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
+
+<style> 
+    #newPKG {
+      display: none;
+    }
+    </style>
+
+<div  id="newPKG" class="container">
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}

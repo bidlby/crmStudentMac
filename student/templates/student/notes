@@ -1,4 +1,4 @@
-
+onclick="location.href='{% url 'student:AddPayment' x.studentId %}'"
 
 CREATE VIEW [customerPerformance]
 AS

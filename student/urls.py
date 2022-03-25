@@ -45,5 +45,7 @@ urlpatterns = [
     path('list/soa/<int:pk>',views.customerSOA,name='soa_PK'),
     path('soa_group/',views.customerSOASummary,name='soa'),
     path('AddPayment/<int:pk>',views.CreatePayment.as_view(),name= 'AddPayment'),
-    path('CheckInByName',views.CheckInFormByName,name='CheckInByName')
+    path('CheckInByName',views.CheckInFormByName,name='CheckInByName'),
+    path('customerFollowUp/',views.customerFollowUp,name='customerFollowUp'),
+    path('editPackages/<int:pk>',views.editDerivedPackage.as_view(),name='editPackages')
 ]

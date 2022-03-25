@@ -1,0 +1,43 @@
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+
+{% block content %}
+
+    
+    {% if searchID %}
+
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Lead Channel</th>
+        <th scope="col">Urgent ??? </th>
+        <th scope="col">Assign Package</th>
+        <th scope="col">Edit Info</th>
+        <th scope="col">Statment</th>
+      </tr>
+    </thead>
+    {% for x in filter %}
+    <tbody>
+      <tr>
+        <th scope="row"><a href="/student/dashBoard/{{x.studentId}}">{{x.studentId}} </th></a>
+        <td>{{x.customerName}} </td>
+        <td>{{x.leadsChannel}}</td>
+        <td>{{x.leadsUrgent}}</td>
+        <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:assignPKG' x.studentId %}'">Assign Package</button></td>
+        <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:updateView' x.studentId %}'">Edit Info</button></td>
+        <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:soa_PK' x.studentId %}'">Account</button></td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+</div>
+
+{% else %}
+<h1>no search yet</h1>
+{% endif %}
+{% endblock %}

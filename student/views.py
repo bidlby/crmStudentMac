@@ -54,6 +54,15 @@ class customerList(ListView): ## still not working
         context = {'queryset':queryset}
         return render(request,'student/customerList.html',context)
 
+## Follow up View
+
+def customerFollowUp(request):
+    followList = customerInfo.objects.filter(followUp=True)
+    context = {'followList':followList}
+    return render(request,'student/customerinfo_followUp.html',context)
+
+####
+
 def list(request):
     queryset1 = customerInfo.objects.all()
     query2 = customerInfo.objects.all().values('studentId').annotate(total=Count('studentId'))
@@ -214,12 +223,12 @@ def detail_viewx(request, id):
 
 
 
-#### Search funchion ####
+#### Search function ####
 
 def searchStudent(request):
     if request.method == "POST":
         searched = request.POST['searched']
-        customerfilter = customerInfo.objects.filter(Q(studentId = searched)|Q(customerName__contains = searched))
+        customerfilter = customerInfo.objects.filter(Q(studentId__contains = searched)|Q(customerName__contains = searched))
         return render(request,'student/student_search.html',{'searched':searched,'filter':customerfilter})
     else :
         return render(request,'student/student_search.html',{})
@@ -227,10 +236,10 @@ def searchStudent(request):
 def searchbyId(request):
     if request.method == "POST":
         searched = request.POST['searchID']
-        customerfilter = customerInfo.objects.filter(Q(studentId = searched))
-        return render(request,'student/SearchID.html',{'searchID':searched,'filter':customerfilter})
+        customerfilter = customerInfo.objects.filter(studentId = searched)
+        return render(request,'student/student_search2.html',{'searchID':searched,'filter':customerfilter})
     else :
-        return render(request,'student/SearchID.html',{})
+        return render(request,'student/student_search2.html',{})
 
 ### create view ###
 
@@ -256,10 +265,23 @@ class derivedPackage(CreateView):
     initial = {'PakageName': ''}
     template_name = 'student/createPkg.html'
     
-    
+    def get_context_data(self, **kwargs):
+       context = super(derivedPackage, self).get_context_data(**kwargs)
+       context['packages'] = studioPackages.objects.all()
+       return context
     
     def get_success_url(self):
         return reverse('student:home')
+
+### Edit Packages
+
+class editDerivedPackage(DetailView):
+    model = studioPackages
+    form_class = derivePackageform
+    fields = '__all__'
+    template_name_suffix = '_Update'
+    success_url = reverse_lazy('student:CustList')
+
 
 ### age Group form
 
