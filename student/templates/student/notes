@@ -48,3 +48,38 @@ class Payments(models.Model):
 
    def __str__(self) -> str:
        return f"{self.transactionId} Trx ID, {self.StudentId} , {self.paymentAmount} , {self.transactionDate}"
+
+
+CREATE VIEW [CustomerAccountBalance] as 
+select a.transactionDate , b.studentId , b.customerName ,  a.paymenttype ,  a.Payment_Ref , ' ' as credit ,  a.paymentAmount as debit  from student_customerspayments a , student_customerinfo b
+where a.StudentId_id = b.studentId
+union ALL
+SELECT   a.transactionDate ,  a.studentId_id , c.customerName,   b.PakageName , '', b.packagePrice as credit , '' as debit from student_assignpackage a , student_studiopackages b , student_customerinfo c
+where a.packageName_id = b.packageId
+and a.StudentId_id = c.studentId
+
+CREATE VIEW [checkInbyDate]
+AS
+SELECT checkInDate , 
+count(checkIn) as total_checkIn FROM
+student_checkindata b 
+group by checkInDate
+
+CREATE VIEW [customerPerformance]
+AS
+SELECT a.studentId ,
+       a.customerName,
+       d.countryList , 
+       c.sourceChannel , 
+       count(DISTINCT b.checkInSeq) as total_checkIn
+         FROM student_customerInfo a ,
+              student_checkInData b ,
+              student_leadSource c,
+              student_countryList d
+where a.studentId = b.studentId
+and a.leadsChannel_id  = c.id
+and a.Nationality_id = d.id
+group by a.studentId ,
+       a.customerName,
+       d.countryList , 
+       c.sourceChannel

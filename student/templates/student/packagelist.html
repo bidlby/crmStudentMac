@@ -1,0 +1,41 @@
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+
+
+{% block content %}
+
+<div class="container">
+
+    <br>
+    <h2>Active Student List</h2>
+
+<table class="table">
+<thead>
+  <tr>
+    <th scope="col">ID</th>
+    <th scope="col"> PakageName</th>
+    <th scope="col"> courseName</th>
+    <th scope="col">Group Age </th>
+    <th scope="col">numberOfLessons</th>
+    <th scope="col">packagePrice</th>
+
+
+  </tr>
+</thead>
+{% for x in packageListAll %}
+<tbody>
+  <tr>
+    <th scope="row"><a href="/student/editPackages/{{x.packageId}}">{{x.packageId}} </th></a>
+    <td>{{x.PakageName}} </td>
+    <td>{{x.courseName}}</td>
+    <td>{{x.group_age}}</td>
+    <td>{{x.numberOfLessons}}</td>
+    <td>{{x.packagePrice}}</td>
+    
+  </tr>
+</tbody>
+{% endfor %}
+</table>
+{% endblock  %}

@@ -3,7 +3,12 @@
 
 {% block content %}
 
+
+
 <div class="container">
+
+    <H2>Update Info:</H2>
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p}} <br> <br>

@@ -1,0 +1,77 @@
+
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h2>final report </h2>
+    <h2>Packages Sales Report</h2>
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+    From :  <input type="date" name="fromdate" id="start">
+    <script>
+      var today = new Date();
+      document.getElementById("start").value = new Date(today.getFullYear(),today.getMonth(),).toISOString().slice(0,10);
+    </script>
+    To : <input type="date" name="todate" id="end">
+    <script>
+      document.getElementById("end").value = new Date(today.getFullYear(),today.getMonth()+1).toISOString().slice(0,10);
+    </script>
+ <input type="submit" value="search" name="" id="">
+    <br>
+    <br>
+<table class="table">
+<thead>
+  <tr>
+    <th scope="col">Transaction Date</th>
+    <th scope="col">Package Name </th>
+    <th scope="col">Total Sales </th>
+    <th scope="col">Total Amount </th>
+  </tr>
+</thead>
+{% for x in packageSold2 %}
+<tbody>
+  <tr>
+    <td>{{x.2}} </td>
+    <td>{{x.0}}</td>
+    <td>{{x.3}}</td>
+    <td>AED {{x.4}}</td>
+    
+  </tr>
+</tbody>
+{% endfor %}
+<tfoot>
+  <tr>
+
+      <td></td>
+      <td><b><center>Total Sales</center></b> </td>
+    <td><b> Total PKG : {{total_PKG.tCount}}</b></td>
+    <td><b> AED {{total_PKG.tAmount}}</b></td>
+  </tr>
+</tfoot>
+</table>
+
+</form>
+    </div>
+    <div class="col">
+      <h1>other report here</h1>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+
+
+</div>
+
+
+
+</div>
+
+{% endblock %}

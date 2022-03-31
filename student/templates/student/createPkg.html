@@ -9,7 +9,7 @@
 
 <div class="container">
 
-    <h2>Current Packages</h2>
+    <h2>Current Packages createPkg.html</h2>
 
     <table class="table">
         <thead>
@@ -20,6 +20,7 @@
             <th scope="col">Group Age</th>
             <th scope="col">Lessons </th>
             <th scope="col">Package Price</th>
+            <th scope="col">Active ? </th>
 
       
           </tr>
@@ -27,12 +28,18 @@
         {% for x in packages %}
         <tbody>
           <tr>
-            <th scope="row"><a href="/student/dashBoard/{{x.packageId}}">{{x.packageId}} </th></a>
+            <th scope="row"><a href="/student/editPackages/{{x.packageId}}">{{x.packageId}} </th></a>
             <td>{{x.PakageName}}</td>
             <td>{{x.courseName}}</td>
             <td>{{x.group_age}}</td>
             <td>{{x.numberOfLessons}}</td>
             <td>{{x.packagePrice}}</td>
+            {% if x.active == True %}
+            <td>Yes</td>
+            {% else %}
+            <td>No</td>
+            {% endif %}
+    
             
             
         </tr>

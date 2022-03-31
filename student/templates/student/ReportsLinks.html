@@ -1,7 +1,20 @@
+
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+{% block content %}
+
+
 <h1>Reports Link</h1>
+
+<h2>ReportsLinks.html</h2>
+
 
 <ul>
     <li><a href="{% url 'student:dbview' %}">Daily Reports</a></li>
+    <li><a href="{% url 'student:pakcageReport' %}">PKG Reports</a></li>
+
     <li>xx report</li>
 </ul>
 
@@ -11,3 +24,5 @@
 <li>Packages Report</li>
 
 </ul>
+
+{% endblock %}

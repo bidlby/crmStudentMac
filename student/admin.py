@@ -17,6 +17,8 @@ admin.site.register(models.countryList)
 admin.site.register(models.checkInByDateModel)
 admin.site.register(models.customersPayments)
 admin.site.register(models.customerPaymentAccount)
+admin.site.register(models.FollowUpModel)
+
 
 
 

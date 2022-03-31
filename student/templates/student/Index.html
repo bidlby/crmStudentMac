@@ -11,11 +11,22 @@
     <li><a href="{% url 'student:CheckInByName' %}">Check In by Name</a></li>
     <li><a href="{% url 'student:soa' %}">SOA</a></li>
     <li><a href="{% url 'student:customerFollowUp' %}">Follow Up</a></li>
-    
+    <li><a href="{% url 'student:pakcageList' %}">Packages</a></li>
+
+    <br>
+
+    follow up section : 
+    <br>
+
+    <h2>Package List</h2>
+    {% for x in pkg_list %}
+    <li>{{x}} </li>
+    {% endfor %}
+
+    <h2>Follow Up List</h2>
+    {% for x in followUpList %}
+    <li> <a  href="/student/dashBoard/{{x.studentId}}">{{x.studentId}}</a> {{x.contactDate}} , {{x.customerName}} , {{x.leadsChannel}} , {{x.leadsContactNumber}} , {{x.intersetList}}, {{x.followUp}} ,{{x.leadeAge}} </li>
+    {% endfor %}
 
     
-
-
-
-</ul>
 {% endblock %}

@@ -1,22 +1,19 @@
 
-
-
-
-
+from itertools import count
+from pyexpat import model
 from django.shortcuts import redirect, render
 from student.models import customerInfo 
 from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm
 from django.contrib import messages
 from rest_framework import generics
 from django.views.generic import DetailView, UpdateView , ListView , TemplateView , CreateView
-from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount , customersPayments
+from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount , customersPayments ,FollowUpModel
 from .serializer import customerSerial 
 from django.db.models import Count , Max , F , Min , Q , Sum
 from django.db import connection
 from django.urls import reverse, reverse_lazy
 import datetime 
 import time
-from django.db.models.functions import Extract
 from django.shortcuts import get_object_or_404  
 from datetime import date, datetime, timedelta
 from django.utils.timezone import now
@@ -35,8 +32,22 @@ def base(request):
 
 ## home Page ##
 
-class homePage(TemplateView):
-    template_name = 'student/index.html'
+#class homePage(TemplateView):
+    #template_name = 'student/index.html'
+    
+def followup(request):
+        pkg_list = studioPackages.objects.filter(active = True)
+        followUpList = customerInfo.objects.filter(followUp = True)
+        a3 = 1
+        q1 = 3
+
+        context = {'pkg_list':pkg_list,'followUpList':followUpList , 'q1':q1 , 'a3':a3}
+
+        return render(request,'student/index.html',context)
+
+
+
+        
 
 class ReportsLinks(TemplateView):
     template_name = 'student/ReportsLinks.html'
@@ -275,12 +286,19 @@ class derivedPackage(CreateView):
 
 ### Edit Packages
 
-class editDerivedPackage(DetailView):
+class editDerivedPackage(UpdateView):
     model = studioPackages
     form_class = derivePackageform
-    fields = '__all__'
+    #fields = '__all__'
     template_name_suffix = '_Update'
-    success_url = reverse_lazy('student:CustList')
+    success_url = reverse_lazy('student:createPKG')
+
+
+def packageList(request):
+    packageListAll = studioPackages.objects.all()
+    context = {'packageListAll':packageListAll}
+    return render(request,'student/packagelist.html',context)
+
 
 
 ### age Group form
@@ -296,7 +314,6 @@ class createAgeList(CreateView):
 
 class leadSouceView(CreateView):
     model = leadSource
-    #form_class = derivePackage
     fields = '__all__'
     template_name = 'student/NewLeadSource.html'
 
@@ -306,7 +323,7 @@ class leadSouceView(CreateView):
        return context
 
     def get_success_url(self):
-        return reverse('home')
+        return reverse('student:home')
 
 ### Payments :
 
@@ -334,7 +351,7 @@ class CreatePayment(CreateView):
 
 ## Assign Package:
 class assignPKG(CreateView):
-    model = AssignPackage
+    model = AssignPackage.objects.select_related('packageName_id').filter(packageName_id__active = False)
     form_class = assignPKGform
     #fields = '__all__'
     template_name = 'student/assignPKG.html'
@@ -390,6 +407,7 @@ def customerSOASummary(request):
     Totaldebit = customerPaymentAccount.objects.aggregate(debits = Sum('debit'))
     TotalOpenAmount = customerPaymentAccount.objects.annotate(OpenAmount = F('credit') - F('debit'))
 
+
     try:
         openBalance = queryset['credit'] - queryset['debit']
     except Exception as e:
@@ -410,12 +428,72 @@ def customerSOA(request,pk):
     totalCredit = customerPaymentAccount.objects.filter(studentId = pk).aggregate(credit = Sum('credit'))
     totalDebit = customerPaymentAccount.objects.filter(studentId = pk).aggregate(debit = Sum('debit'))
 
+    
     try:
         openBalance = totalCredit['credit'] - totalDebit['debit']
     except Exception as e:
         openBalance = 0 
 
-    
-    context = {'queryset':queryset,'customerName':customerName,
+    if request.method == 'POST':
+        fromdate = request.POST['fromdate']
+        todate = request.POST['todate']
+        showresult = customerPaymentAccount.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate,studentId=pk)
+
+        context = {'queryset':queryset,'customerName':customerName,
+               'openBalance':openBalance , 'totalCredit':totalCredit , 'totalDebit':totalDebit,'showresult':showresult}
+        #showresult = customerPaymentAccount.objects.raw('select * student_customerspayments where transactionDate >= "'+fromdate+'" and transactionDate <= "'+todate+'" and studentId = %s' ,[pk])
+        return render(request,'student/soa.html',context)
+    else:
+        showresult = customerPaymentAccount.objects.filter(studentId=pk)
+        context = {'queryset':queryset,'customerName':customerName,
+               'openBalance':openBalance , 'totalCredit':totalCredit , 'totalDebit':totalDebit,'showresult':showresult}
+        return render(request,'student/soa.html',context)
+
+def customerSOA2(request):
+    queryset = customerPaymentAccount.objects.all()
+    customerName = customerInfo.objects.all()
+    totalCredit = customerPaymentAccount.objects.all().aggregate(credit = Sum('credit'))
+    totalDebit = customerPaymentAccount.objects.all().aggregate(debit = Sum('debit'))
+
+    try:
+        openBalance = totalCredit['credit'] - totalDebit['debit']
+    except Exception as e:
+        openBalance = 0 
+
+    if request.method == 'POST':
+        fromdate = request.POST['fromdate']
+        todate = request.POST['todate']
+        #showresult = customerPaymentAccount.objects.raw('select * student_customerspayments where transactionDate >= "'+fromdate+'" and transactionDate <= "'+todate+'"')
+        showresult = customerPaymentAccount.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate)
+        return render(request,'student/soa_f.html',{'showresult':showresult})
+    else:
+        showresult = customerPaymentAccount.objects.all() 
+        context = {'queryset':queryset,'customerName':customerName,
                'openBalance':openBalance , 'totalCredit':totalCredit , 'totalDebit':totalDebit}
-    return render(request,'student/soa.html',context)
+        return render(request,'student/soa_f.html',{'showresult':showresult})
+
+
+### Packages Sold Report:
+
+def pakcageReport(request):
+    packageSold = AssignPackage.objects.all()
+    packageSold3 = AssignPackage.objects.raw('select a.transactionDate , a.soldPackageId , b.PakageName , count(a.soldPackageId) as total , sum(b.packagePrice) as total_amount from student_AssignPackage a , student_studioPackages b where a.packageName_id = b.packageId group by a.transactionDate , b.PakageName ' )
+
+    #return render(request,'student/packageReport.html',{'packageSold2':packageSold2})
+
+    if request.method == 'POST':
+        fromdate = request.POST['fromdate']
+        todate = request.POST['todate']
+        packageSold2 = AssignPackage.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate).select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice'))
+        total_PKG = AssignPackage.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate).aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
+        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2 }
+        #packageSold3 = AssignPackage.objects.raw('select a.transactionDate , a.soldPackageId , b.PakageName , count(a.soldPackageId) as total , sum(b.packagePrice) as total_amount from student_AssignPackage a , student_studioPackages b where a.packageName_id = b.packageId and a.transactiondate >= %s and a.transactiondate <= %s group by a.transactionDate , b.PakageName order by a.transactionDate desc ',[fromdate,todate] )
+        return render(request,'student/packageReport.html',context)
+    else:
+        packageSold2 = AssignPackage.objects.select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice'))
+        total_PKG = AssignPackage.objects.aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
+        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2 }
+        #packageSold3 = AssignPackage.objects.raw('select a.transactionDate , a.soldPackageId , b.PakageName , count(a.soldPackageId) as total , sum(b.packagePrice) as total_amount from student_AssignPackage a , student_studioPackages b where a.packageName_id = b.packageId group by a.transactionDate , b.PakageName order by a.transactionDate desc' )
+        return render(request,'student/packageReport.html',context)
+
+        a3 = FollowUpModel.objects.all().select_related('studentId').values_list('studentId__customerName').annotate(total=Count('studentId'))

@@ -1,5 +1,6 @@
 import datetime
 from operator import mod
+from tkinter import CASCADE
 from django.db import NotSupportedError, models
 from datetime import datetime
 from django.utils import timezone
@@ -23,7 +24,7 @@ class leadSource(models.Model):
         return f'{self.sourceChannel}'
 
 class countryList(models.Model):
-    countryList = models.CharField(max_length=200)
+    countryList = models.CharField(max_length=200 , unique=True)
 
     def __str__(self) -> str:
         return f'{self.countryList}'
@@ -38,7 +39,7 @@ class customerInfo(models.Model):
     leadeAge = models.IntegerField()
     leadsLocation = models.CharField(max_length=100)
     leadsContactNumber = models.IntegerField()
-    emailAddress = models.EmailField()
+    emailAddress = models.EmailField(unique=True)
     leadsComment = models.CharField(max_length=1000)
     leadsUrgent = models.BooleanField()
     Nationality = models.ForeignKey(countryList,max_length=250,on_delete=models.CASCADE)
@@ -48,8 +49,18 @@ class customerInfo(models.Model):
     def __str__(self) -> str:
         return f"{self.customerName}"
     
+
+## customer Follow Up
+class FollowUpModel(models.Model):
+    commentSeq = models.AutoField(primary_key=True)
+    studentId = models.ForeignKey(customerInfo,on_delete=models.DO_NOTHING)
+    commentDate = models.DateField(default=datetime.now)
+    comments = models.CharField(max_length=200)
+    callBackOn = models.DateField()
+    gb1 = models.BooleanField(default=False)
+
     def __str__(self) -> str:
-        return f"{self.studentId}"
+        return f"{self.studentId} , {self.comments}"
 
 class checkInData(models.Model):
     checkInSeq = models.AutoField(primary_key=True)
@@ -73,19 +84,21 @@ class studioPackages(models.Model):
     group_age = models.ForeignKey(groupAge,max_length=255,on_delete=models.CASCADE)
     numberOfLessons = models.IntegerField()
     packagePrice = models.IntegerField()
+    active = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return f"{self.PakageName}"
 
 class AssignPackage(models.Model):
    soldPackageId = models.AutoField(primary_key=True)
+   transactionDate = models.DateField(default=datetime.now)
    StudentId = models.ForeignKey(customerInfo,max_length=255,on_delete=models.DO_NOTHING)
    packageName = models.ForeignKey(studioPackages,max_length=255,on_delete=models.DO_NOTHING)
    startDate = models.DateField(default=datetime.now)
    endDate = models.DateField(blank=True)
 
    def __str__(self) -> str:
-       return f"{self.StudentId} , {self.packageName}"
+       return f"{self.StudentId} , {self.packageName} , {self.soldPackageId}"
 
 ## Payment 
 

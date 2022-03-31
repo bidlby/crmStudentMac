@@ -15,7 +15,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path  , include
 from django.views import View
 from . import views
 
@@ -23,7 +23,7 @@ app_name = 'student'
 
 urlpatterns = [
     path('base',views.base,name='base'),
-    path('',views.homePage.as_view(),name = 'home'),
+    path('',views.followup,name = 'home'),
     path('NewReg/',views.NewReg,name='NewReg'),
     path('list/',views.customerList.as_view(),name='CustList'),
     path('list2/',views.list,name='CustInfo2'),
@@ -31,7 +31,7 @@ urlpatterns = [
     path('customerDtl/<int:pk>',views.customerDtlView.as_view()),
     path('customerUpd/<int:pk>',views.customerViewUpdate.as_view()),
     path('successpage/',views.successpage,name='successpage'),
-    path('dashBoard/<int:id>',views.detail_viewx),
+    path('student/dashBoard/<int:id>',views.detail_viewx),
     path('search',views.searchStudent,name='search'),
     path('searchID',views.searchbyId,name='searchID'),
     path('new/',views.xx.as_view()),
@@ -43,9 +43,12 @@ urlpatterns = [
     path('dbvew/',views.dbview,name='dbview'),
     path('ReportsLinks',views.ReportsLinks.as_view(),name='ReportsLinks'),
     path('list/soa/<int:pk>',views.customerSOA,name='soa_PK'),
+    path('soa2/',views.customerSOA2,name='soa2'),
     path('soa_group/',views.customerSOASummary,name='soa'),
     path('AddPayment/<int:pk>',views.CreatePayment.as_view(),name= 'AddPayment'),
     path('CheckInByName',views.CheckInFormByName,name='CheckInByName'),
     path('customerFollowUp/',views.customerFollowUp,name='customerFollowUp'),
-    path('editPackages/<int:pk>',views.editDerivedPackage.as_view(),name='editPackages')
+    path('student/editPackages/<int:pk>',views.editDerivedPackage.as_view(),name='editPackages'),
+    path('pakcageList/',views.packageList,name='pakcageList'),
+    path('pakcageReport/',views.pakcageReport , name='pakcageReport')
 ]

@@ -6,37 +6,22 @@
 
 <br>
 
-<h1>soa.html</h1>
+<h1>soa filter.html</h1>
 
 
-<div class="container">
-    {% for x in customerName %}
- <h2>Statment of Account Customer :  <h1>{{x.customerName}}</h1> </h2> 
- <style>
-    h4 { color: #ff245b; }
-  </style>
- <h4>Total Open Amount : {{openBalance}}</h4>
+
 
     <br>
 </div>
 <div class="container">
-<button class="btn btn-lg btn-danger" onclick="location.href='{% url 'student:AddPayment' x.studentId %}'" > Make Payment</a></button>
 <br>
 <br>
-{% endfor %}
+
 <form method="POST">
   {% csrf_token %}
-From : <input type="date" name="fromdate" id="start" value=""> 
-<script>
-    var today = new Date();
-    document.getElementById("start").value = new Date(today.getFullYear(),today.getMonth(),).toISOString().slice(0,10);
-  </script>
-To : <input type="date" name="todate" id="end">
-<script>
-  document.getElementById("end").value = new Date(today.getFullYear(),today.getMonth()+1).toISOString().slice(0, 10);
-</script>
+from : <input type="date" name="fromdate"> 
+to : <input type="date" name="todate">
  <input type="submit" value="search" name="" id="">
-
 </div>
 <br>
 <table class="table container">

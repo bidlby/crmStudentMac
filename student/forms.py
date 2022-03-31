@@ -99,6 +99,10 @@ class assignPKGform(forms.ModelForm):
             'StudentId':forms.Textarea(attrs={'hidden':'True'})
         }
 
+    def __init__(self,*args, **kwargs):
+        super(assignPKGform, self).__init__(*args, **kwargs)
+        self.fields['packageName'].queryset = studioPackages.objects.filter(active = True)
+
 class PaymentForm(forms.ModelForm):
     #StudentId = forms.CharField(label=)
     #customerName = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
