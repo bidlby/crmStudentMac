@@ -16,12 +16,46 @@
     <br>
 
     follow up section : 
+
+    <div class="container">
+
+        <br>
+        <h2>Active Package List</h2>
+        <br>
+        <form method="POST">
+            {% csrf_token %}
+         Age Filter : <input type="string" name="age" id="">
+         Course Filter : <input type="string" name="course" id="">
+
+        <input type="submit" value="search">
+  
+  <table class="table">
+
+    <thead>
+      <tr>
+        <th scope="col">Package Name</th>
+        <th scope="col">Course Name</th>
+        <th scope="col">Group Age</th>
+        <th scope="col">Total Lessons</th>
+        <th scope="col">Package Price</th>
+  
+      </tr>
+    </thead>
+    {% for x in age_filter %}
+    <tbody>
+      <tr>
+        <td>{{x.1}} </td>
+        <td>{{x.2}}</td>
+        <td>{{x.0}}</td>
+        <td>{{x.3}}</td>
+        <td>{{x.4}}</td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+</form>
     <br>
 
-    <h2>Package List</h2>
-    {% for x in pkg_list %}
-    <li>{{x}} </li>
-    {% endfor %}
 
     <h2>Follow Up List</h2>
     {% for x in followUpList %}
@@ -29,4 +63,11 @@
     {% endfor %}
 
     
+    <select>
+      {% for choices in courseList.details.all %}
+        <option> {{ courseList.choice }} </option>
+      {% endfor %}
+    </select>
+
+
 {% endblock %}

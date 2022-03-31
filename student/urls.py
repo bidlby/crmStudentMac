@@ -24,7 +24,7 @@ app_name = 'student'
 urlpatterns = [
     path('base',views.base,name='base'),
     path('',views.followup,name = 'home'),
-    path('NewReg/',views.NewReg,name='NewReg'),
+    path('NewReg/',views.NewStudentReg.as_view(),name='NewReg'),
     path('list/',views.customerList.as_view(),name='CustList'),
     path('list2/',views.list,name='CustInfo2'),
     path('checkIn/',views.CheckInForm,name='checkIn'),
@@ -34,7 +34,6 @@ urlpatterns = [
     path('student/dashBoard/<int:id>',views.detail_viewx),
     path('search',views.searchStudent,name='search'),
     path('searchID',views.searchbyId,name='searchID'),
-    path('new/',views.xx.as_view()),
     path('newPKG/',views.derivedPackage.as_view(),name='createPKG'),
     path('ageGroup/',views.createAgeList.as_view(),name='ageGroup'),
     path('list/assignPKG/<int:pk>',views.assignPKG.as_view(),name='assignPKG'),

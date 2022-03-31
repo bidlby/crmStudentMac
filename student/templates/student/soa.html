@@ -26,12 +26,12 @@
 {% endfor %}
 <form method="POST">
   {% csrf_token %}
-From : <input type="date" name="fromdate" id="start" value=""> 
+From : <input type="date" name="fromdate" id="start" value="" required> 
 <script>
     var today = new Date();
     document.getElementById("start").value = new Date(today.getFullYear(),today.getMonth(),).toISOString().slice(0,10);
   </script>
-To : <input type="date" name="todate" id="end">
+To : <input type="date" name="todate" id="end" required>
 <script>
   document.getElementById("end").value = new Date(today.getFullYear(),today.getMonth()+1).toISOString().slice(0, 10);
 </script>

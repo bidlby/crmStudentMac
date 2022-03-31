@@ -5,6 +5,8 @@
 
 {% block content %}
 
+<h3>packageReport.html</h3>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col">
@@ -13,12 +15,12 @@
     <br>
     <form method="POST">
         {% csrf_token %}
-    From :  <input type="date" name="fromdate" id="start">
+    From :  <input type="date" name="fromdate" id="start" required>
     <script>
       var today = new Date();
       document.getElementById("start").value = new Date(today.getFullYear(),today.getMonth(),).toISOString().slice(0,10);
     </script>
-    To : <input type="date" name="todate" id="end">
+    To : <input type="date" name="todate" id="end" required>
     <script>
       document.getElementById("end").value = new Date(today.getFullYear(),today.getMonth()+1).toISOString().slice(0,10);
     </script>
@@ -59,7 +61,40 @@
 </form>
     </div>
     <div class="col">
-      <h1>other report here</h1>
+      <h1>Year To Date Sales</h1>
+     <br>
+      <br>
+      <br>
+      <br>
+      <br>
+     <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Transaction Date</th>
+          <th scope="col">Total Packages </th>
+          <th scope="col">Total Amount </th>
+        </tr>
+      </thead>
+      {% for x in TotalPkgSaleMonhtly %}
+      <tbody>
+        <tr>
+          <td>{{x.month|date:"F"}}-{{x.month|date:"Y"}}</td>
+          <td>{{x.tp}}</td>
+          <td>{{x.tm}}</td>
+          
+        </tr>
+      </tbody>
+      {% endfor %}
+      <tfoot>
+        <tr>
+      
+            <td><b><center>Total Sales</center></b> </td>
+          <td><b> Total PKG : {{total_PKG.tCount}}</b></td>
+          <td><b> AED {{total_PKG.tAmount}}</b></td>
+        </tr>
+      </tfoot>
+      </table>
+
     </div>
   </div>
 </div>

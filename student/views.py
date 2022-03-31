@@ -1,6 +1,8 @@
 
+from calendar import month
 from itertools import count
 from pyexpat import model
+from re import M
 from django.shortcuts import redirect, render
 from student.models import customerInfo 
 from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm
@@ -19,7 +21,7 @@ from datetime import date, datetime, timedelta
 from django.utils.timezone import now
 import json
 from django.db import connection
-
+from django.db.models.functions import TruncMonth
 
 
 
@@ -40,6 +42,19 @@ def followup(request):
         followUpList = customerInfo.objects.filter(followUp = True)
         a3 = 1
         q1 = 3
+
+
+        if request.method == 'POST':
+            age = request.POST['age']
+            course = request.POST['course']
+            age_filter = studioPackages.objects.select_related('group_age','courseName').values_list('group_age__groupAge','PakageName','courseName__coursList','numberOfLessons','packagePrice').filter(Q(group_age__groupAge__contains=age),Q(courseName__coursList__contains=course)).filter(active=True)
+            context = {'age_filter':age_filter,'followUpList':followUpList}
+            return render(request,'student/index.html',context)
+        else:
+            age_filter = studioPackages.objects.select_related('group_age','courseName').values_list('group_age__groupAge','PakageName','courseName__coursList','numberOfLessons','packagePrice').all().filter(active=True)
+            context = {'age_filter':age_filter,'followUpList':followUpList}
+            return render(request,'student/index.html',context)
+
 
         context = {'pkg_list':pkg_list,'followUpList':followUpList , 'q1':q1 , 'a3':a3}
 
@@ -85,21 +100,16 @@ def list(request):
     return render(request,'student/customerList.html',context)
 
 
-## Forms ## 
-def NewReg(request):
-    if request.method == 'POST':
-        Reg_form = newStudent(request.POST)
-        if Reg_form.is_valid():
-            Reg_form.save()
-            pass  # does nothing, just trigger the validation
-    else:
-        messages.error(request, 'Error saving form')
+## New Customer ## 
 
-    Reg_form = newStudent()
-    NewStud = customerInfo.objects.all()
-    context = {'Reg_form':Reg_form,
-                'NewStud':NewStud}
-    return render(request,'student/NewReg.html', context)
+class NewStudentReg(CreateView):
+    model = customerInfo
+    form_class = newStudent
+    #fields = '__all__'
+    template_name = 'student/NewReg.html'
+    
+    def get_success_url(self):
+        return reverse('student:CustList')
 
 ## check In Form
 def CheckInForm(request):
@@ -254,14 +264,7 @@ def searchbyId(request):
 
 ### create view ###
 
-class xx(CreateView):
-    model = customerInfo
-    form_class = newStudent
-    #fields = '__all__'
-    template_name = 'student/newLead.html'
-    
-    def get_success_url(self):
-        return reverse('home')
+
 
 
 #### New Package Form
@@ -476,24 +479,22 @@ def customerSOA2(request):
 ### Packages Sold Report:
 
 def pakcageReport(request):
-    packageSold = AssignPackage.objects.all()
-    packageSold3 = AssignPackage.objects.raw('select a.transactionDate , a.soldPackageId , b.PakageName , count(a.soldPackageId) as total , sum(b.packagePrice) as total_amount from student_AssignPackage a , student_studioPackages b where a.packageName_id = b.packageId group by a.transactionDate , b.PakageName ' )
+    
 
-    #return render(request,'student/packageReport.html',{'packageSold2':packageSold2})
+    TotalPkgSaleMonhtly = AssignPackage.objects.annotate(month = TruncMonth('transactionDate')).values('month').annotate(tp = Count('packageName_id')).annotate(tm = Sum('packageName__packagePrice')).filter(packageName__packagePrice__gte = 1).order_by('-month')
+
+
+    print(TotalPkgSaleMonhtly)
 
     if request.method == 'POST':
         fromdate = request.POST['fromdate']
         todate = request.POST['todate']
-        packageSold2 = AssignPackage.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate).select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice'))
-        total_PKG = AssignPackage.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate).aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
+        packageSold2 = AssignPackage.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate).select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice')).order_by('-transactionDate').filter(packageName__packagePrice__gte = 1)
+        total_PKG = AssignPackage.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate,packageName__packagePrice__gte = 1).aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
         context = {'total_PKG':total_PKG ,'packageSold2':packageSold2 }
-        #packageSold3 = AssignPackage.objects.raw('select a.transactionDate , a.soldPackageId , b.PakageName , count(a.soldPackageId) as total , sum(b.packagePrice) as total_amount from student_AssignPackage a , student_studioPackages b where a.packageName_id = b.packageId and a.transactiondate >= %s and a.transactiondate <= %s group by a.transactionDate , b.PakageName order by a.transactionDate desc ',[fromdate,todate] )
         return render(request,'student/packageReport.html',context)
     else:
-        packageSold2 = AssignPackage.objects.select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice'))
-        total_PKG = AssignPackage.objects.aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
-        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2 }
-        #packageSold3 = AssignPackage.objects.raw('select a.transactionDate , a.soldPackageId , b.PakageName , count(a.soldPackageId) as total , sum(b.packagePrice) as total_amount from student_AssignPackage a , student_studioPackages b where a.packageName_id = b.packageId group by a.transactionDate , b.PakageName order by a.transactionDate desc' )
+        packageSold2 = AssignPackage.objects.select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice')).order_by('-transactionDate').filter(packageName__packagePrice__gte = 1)
+        total_PKG = AssignPackage.objects.filter(packageName__packagePrice__gte = 1).aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
+        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2,'TotalPkgSaleMonhtly':TotalPkgSaleMonhtly}
         return render(request,'student/packageReport.html',context)
-
-        a3 = FollowUpModel.objects.all().select_related('studentId').values_list('studentId__customerName').annotate(total=Count('studentId'))
