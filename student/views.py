@@ -6,7 +6,6 @@ from django.contrib import messages
 from rest_framework import generics
 from django.views.generic import DetailView, UpdateView , ListView , TemplateView , CreateView
 from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount , customersPayments ,FollowUpModel
-from .serializer import customerSerial 
 from django.db.models import Count , Max , F , Min , Q , Sum
 from django.db import connection
 from django.urls import reverse, reverse_lazy
@@ -69,7 +68,7 @@ class customerList(ListView): ## still not working
     queryset = customerInfo.objects.all()
     paginate_by = 5
     model = customerInfo
-    serializer_class = customerSerial
+ 
 
 
     def list(request):

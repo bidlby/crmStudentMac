@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-eo&di#auzi8w@u8qd5u5=iipzt+k_08-tu@(nng0aqzq$ll3t%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['bees.pythonanywhere.com','127.0.0.1']
 
 MEDIA_URL = 'student/imgs/'
 
@@ -44,12 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'student',
     'members',
-    'crispy_forms',
     'bootstrapform',
     'bootstrap3',
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4' 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
