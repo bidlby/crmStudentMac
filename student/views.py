@@ -1,8 +1,4 @@
 
-from calendar import month
-from itertools import count
-from pyexpat import model
-from re import M
 from django.shortcuts import redirect, render
 from student.models import customerInfo 
 from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm
@@ -49,11 +45,11 @@ def followup(request):
             course = request.POST['course']
             age_filter = studioPackages.objects.select_related('group_age','courseName').values_list('group_age__groupAge','PakageName','courseName__coursList','numberOfLessons','packagePrice').filter(Q(group_age__groupAge__contains=age),Q(courseName__coursList__contains=course)).filter(active=True)
             context = {'age_filter':age_filter,'followUpList':followUpList}
-            return render(request,'student/index.html',context)
+            return render(request,'student/Index.html',context)
         else:
             age_filter = studioPackages.objects.select_related('group_age','courseName').values_list('group_age__groupAge','PakageName','courseName__coursList','numberOfLessons','packagePrice').all().filter(active=True)
             context = {'age_filter':age_filter,'followUpList':followUpList}
-            return render(request,'student/index.html',context)
+            return render(request,'student/Index.html',context)
 
 
         context = {'pkg_list':pkg_list,'followUpList':followUpList , 'q1':q1 , 'a3':a3}
@@ -518,3 +514,9 @@ def customerAttendance(request):
 
     conte = {'checkInTotal':checkInTotal,'totalCheckInMonthly':totalCheckInMonthly}
     return render(request,'student/checkInReport.html',conte)
+
+
+## test to https://bees.pythonanywhere.com/checkIn/
+
+def testAny(request):
+    return render(request,'student/testPyAnyWhere.html',{})

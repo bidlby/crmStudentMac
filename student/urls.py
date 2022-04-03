@@ -54,6 +54,7 @@ urlpatterns = [
     path('pakcageList/',views.packageList,name='pakcageList'),
     path('pakcageReport/',views.pakcageReport , name='pakcageReport'),
     path('customerAttendance/',views.customerAttendance , name='customerAttendance'),
+    path('testAny',views.testAny,name='testAny')
 
     
 ]
