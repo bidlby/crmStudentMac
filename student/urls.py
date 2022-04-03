@@ -45,9 +45,15 @@ urlpatterns = [
     path('soa2/',views.customerSOA2,name='soa2'),
     path('soa_group/',views.customerSOASummary,name='soa'),
     path('AddPayment/<int:pk>',views.CreatePayment.as_view(),name= 'AddPayment'),
-    path('CheckInByName',views.CheckInFormByName,name='CheckInByName'),
+   #path('CheckInByName',views.CheckInFormByName,name='CheckInByName'),
+    path('checkPost',views.checkPost,name='checkPost'),
+    path('CheckInByName/',views.checkInName,name='CheckInByName'),
+    path('checkPostName/',views.CheckInByName.as_view(),name='checkPostName'),
     path('customerFollowUp/',views.customerFollowUp,name='customerFollowUp'),
     path('student/editPackages/<int:pk>',views.editDerivedPackage.as_view(),name='editPackages'),
     path('pakcageList/',views.packageList,name='pakcageList'),
-    path('pakcageReport/',views.pakcageReport , name='pakcageReport')
+    path('pakcageReport/',views.pakcageReport , name='pakcageReport'),
+    path('customerAttendance/',views.customerAttendance , name='customerAttendance'),
+
+    
 ]

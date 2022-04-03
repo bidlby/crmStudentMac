@@ -1,0 +1,24 @@
+
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+{% load static %}
+
+{% block content %}
+
+
+{% for x in  checkInTotal %}
+<li>{{x.checkInDate}} -- {{x.countCheck}}</li>
+{% endfor %}
+
+<br>
+
+monthly check In
+
+{% for x in  totalCheckInMonthly %}
+<li>{{x.month}} -- {{x.tCheck}}</li>
+{% endfor %}
+
+
+
+
+{% endblock  %}

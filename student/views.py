@@ -71,6 +71,7 @@ class ReportsLinks(TemplateView):
 
 class customerList(ListView): ## still not working
     queryset = customerInfo.objects.all()
+    paginate_by = 5
     model = customerInfo
     serializer_class = customerSerial
 
@@ -133,24 +134,31 @@ def successpage(request):
 
         
 ## check In by Name
-def CheckInFormByName(request):
+
+def checkInName(request):
+
     if request.method == 'POST':
-        checkIn_form = newCheckIn(request.POST)
-        if checkIn_form.is_valid():
-            checkIn_form.save()
-            return redirect(reverse('student:successpage'))
+        idFilter = request.POST['searchID']
+        NameFilter = customerInfo.objects.filter(studentId = idFilter)
+        context = {'NameFilter':NameFilter}
+        #return reverse('student:checkPostName')
+        return render(request,'student/checkInByNamePost.html',context)
     else:
-        messages.error(request, 'Error saving form')
+        return render(request,'student/checkInByName.html',{})
 
-    checkIn_form = newCheckIn()
-    Newcheck = checkInData.objects.all()
-    context = {'checkIn_form':checkIn_form,
-                'Newcheck':Newcheck}
-    #return redirect(request,'student/homePage.html')
-    return render(request,'student/checkInByName.html', context)
+def checkPost(request):
+    return render(request,'student/checkInByNamePost.html',{})
 
-def successpage(request):
-    return render(request,'student/checkInPassed.html')
+### Payments :
+
+class CheckInByName(CreateView):
+    model = checkInData
+    form_class = newCheckIn
+    #fields = '__all__'
+    template_name = 'student/checkInByNamePost.html'
+
+    def get_success_url(self):
+        return reverse('student:checkPostName')
 
 ##detailed View
 
@@ -482,6 +490,8 @@ def pakcageReport(request):
     
 
     TotalPkgSaleMonhtly = AssignPackage.objects.annotate(month = TruncMonth('transactionDate')).values('month').annotate(tp = Count('packageName_id')).annotate(tm = Sum('packageName__packagePrice')).filter(packageName__packagePrice__gte = 1).order_by('-month')
+    packageSoldTotal = AssignPackage.objects.filter(packageName__packagePrice__gte = 1).aggregate(tCount = Count('packageName_id'),tm = Sum('packageName__packagePrice'))
+
 
 
     print(TotalPkgSaleMonhtly)
@@ -491,10 +501,20 @@ def pakcageReport(request):
         todate = request.POST['todate']
         packageSold2 = AssignPackage.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate).select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice')).order_by('-transactionDate').filter(packageName__packagePrice__gte = 1)
         total_PKG = AssignPackage.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate,packageName__packagePrice__gte = 1).aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
-        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2 }
+        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2,'TotalPkgSaleMonhtly' :TotalPkgSaleMonhtly,'packageSoldTotal':packageSoldTotal}
         return render(request,'student/packageReport.html',context)
     else:
         packageSold2 = AssignPackage.objects.select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice')).order_by('-transactionDate').filter(packageName__packagePrice__gte = 1)
         total_PKG = AssignPackage.objects.filter(packageName__packagePrice__gte = 1).aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
-        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2,'TotalPkgSaleMonhtly':TotalPkgSaleMonhtly}
+        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2,'TotalPkgSaleMonhtly':TotalPkgSaleMonhtly,'packageSoldTotal':packageSoldTotal}
         return render(request,'student/packageReport.html',context)
+
+### Performance Report :
+
+def customerAttendance(request):
+
+    totalCheckInMonthly = checkInData.objects.annotate(month = TruncMonth('checkInDate')).values('month').annotate(tCheck = Count('checkInSeq')).order_by('-month')
+    checkInTotal = checkInData.objects.values('checkInDate').annotate(countCheck = Count('checkInSeq')).order_by('-checkInDate')
+
+    conte = {'checkInTotal':checkInTotal,'totalCheckInMonthly':totalCheckInMonthly}
+    return render(request,'student/checkInReport.html',conte)

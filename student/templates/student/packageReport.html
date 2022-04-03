@@ -10,7 +10,6 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col">
-      <h2>final report </h2>
     <h2>Packages Sales Report</h2>
     <br>
     <form method="POST">
@@ -65,8 +64,6 @@
      <br>
       <br>
       <br>
-      <br>
-      <br>
      <table class="table">
       <thead>
         <tr>
@@ -79,8 +76,8 @@
       <tbody>
         <tr>
           <td>{{x.month|date:"F"}}-{{x.month|date:"Y"}}</td>
-          <td>{{x.tp}}</td>
-          <td>{{x.tm}}</td>
+          <td> {{x.tp}}</td>
+          <td>AED {{x.tm}}</td>
           
         </tr>
       </tbody>
@@ -89,8 +86,8 @@
         <tr>
       
             <td><b><center>Total Sales</center></b> </td>
-          <td><b> Total PKG : {{total_PKG.tCount}}</b></td>
-          <td><b> AED {{total_PKG.tAmount}}</b></td>
+          <td><b> Total PKG : {{packageSoldTotal.tCount}}</b></td>
+          <td><b> AED : {{packageSoldTotal.tm}}</b></td>
         </tr>
       </tfoot>
       </table>
