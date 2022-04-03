@@ -3,7 +3,6 @@ from django.shortcuts import redirect, render
 from student.models import customerInfo 
 from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm
 from django.contrib import messages
-from rest_framework import generics
 from django.views.generic import DetailView, UpdateView , ListView , TemplateView , CreateView
 from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount , customersPayments ,FollowUpModel
 from django.db.models import Count , Max , F , Min , Q , Sum
