@@ -382,7 +382,7 @@ class assignPKG(CreateView):
 class studentUpdateView(UpdateView):
     model = customerInfo
     fields = '__all__'
-    template_name_suffix = '_update_form'
+    template_name_suffix = '_update'
     success_url = reverse_lazy('student:CustList')
 
 
