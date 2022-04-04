@@ -22,7 +22,7 @@
                   <div class="col-md-6 col-lg-7 d-flex align-items-center">
                     <div class="card-body p-4 p-lg-5 text-black">
                       <h1>add id</h1>
-                      <form method="post" onsubmit='disableButton()'>
+                      <form method="POST" onsubmit='disableButton()'>
 
                         <script>
                           function disableButton() {
@@ -50,7 +50,7 @@
 
 
 
-                          <button class="btn btn-dark btn-lg btn-block" type="submit" id="btn">Login</button>
+                          <button class="btn btn-dark btn-lg btn-block" type="submit" id="btn" onclick='save(); this.disabled = true;'>Login</button>
                           
                         </div>
       
@@ -67,15 +67,14 @@
         </div>
       </section>
 
-      <script>
-        function disableButton() {
-            var btn = document.getElementById('login3');
-            btn.disabled = true;
-            btn.innerText = 'Posting...'
-        }
-    </script>
 
-      <button class="" type="submit" id="login3" >Login3</button>
+
+<script>
+    function save() {
+        var msg = document.getElementById('msg');
+        btClickMe.innerHTML = 'Data submitted and the button disabled ☺';
+    }
+</script>
 
 </body>
 
