@@ -3,7 +3,7 @@
 
 {% block content%}
 
-<h1>123</h1>
+<h1>checkIn.html</h1>
 <body>
     
     <section class="vh-100" style="background-color: #d4d3d3;">
@@ -38,7 +38,26 @@
                         </div>
       
                         <div class="pt-1 mb-4">
-                          <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+
+                          <script type="text/javascript">
+                            var clicked = false;
+                            function disableMe() {
+                                if (document.getElementById) {
+                                    if (!clicked) {
+                                        document.getElementById("login3").value = "thank you";
+                                        clicked = true;
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                } else {
+                                    return true;
+                                }
+                            }
+                        </script>
+
+                          <button class="btn btn-dark btn-lg btn-block" type="submit" id="login">Login</button>
+                          
                         </div>
       
                         <a href="#!" class="small text-muted">Terms of use.</a>
@@ -53,6 +72,7 @@
           </div>
         </div>
       </section>
+      <button class="btn btn-dark btn-lg btn-block" type="button" id="login3">Login3</button>
 
 </body>
 
