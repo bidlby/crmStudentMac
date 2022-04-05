@@ -15,9 +15,7 @@
                 <span class="text-black-50">{{data.emailAddress}}</span>
                 <span class="text-black-50">{{data.intersetList}}</span>
                 <br>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Assign Package 2
-                </button>
+
             </div>
 
 
@@ -54,7 +52,17 @@
             </div>
         </div>
     </div>
+    {% for x in aPKG%}
+    <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:assignPKG' x.studentId %}'">Assign Package</button></td>
+    <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:soa_PK' x.studentId %}'">Account</button></td>
+    <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:AddPayment' x.studentId %}'">Payments</button></td>
+    <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:updateView' x.studentId %}'">Profile Update</button></td>
+
+    {% endfor %}
+
     <table class="table table-striped">
+        <br>
+        <br>
         <thead>
           <tr>
             <th scope="col">Package Name</th>
@@ -75,72 +83,5 @@
 </div>
 </div>
 </div>
-
-
-
-
-
-<br>
-<br>
-<br>
-<br>
-    <div class="container">
-        <h3>customer Name : {{data.customerName}}</h3>
-        <h3>total Check In {{bees}}</h3>
-        <h3>first check in was in : {{xx.checkInDate}}</h3>
-        <h3>last check in was in : {{aa.checkInDate}}</h3>
-        <h3>{{cc.days}} days</h3>
-        <h3>{{mm}}</h3>
-        <h3>{{test}}</h3>
-
-        {% for q in vv2 %}
-
-            {{ q.maxdate }}
-
-            {% endfor %}
-
-            {% for q in sql %}
-
-            <li><h1>{{ q.total }} SQL dtl_mutl.html</h1></li>
-
-            {% endfor %}
-
-            {{idfilter}} as id filter
-    </div>
-
-    {% for x in activePackage %}
-
-    <li>{{ x.PKGName }} , total leassons {{x.totalLessons}}</li>
-
-    {% endfor %}
-
-    {% for x in totalClass %}
-
-    <li>{{ x.totalLessons }} total class</li>
-
-    {% endfor %}
-
-    
-
-    {% for x in remaingclass %}
-
-    <li> total check in  {{x.total}} as final</li>
-
-    {% endfor %}
-
-
-    {% for x in xxc %}
-
-    <li> {{x.total}}as final</li>
-
-    {% endfor %}
-
-
-{{qwe}} total lessones 
-<br>
-{{qwe2}} total check IN
-
-
  
-
 {% endblock %}

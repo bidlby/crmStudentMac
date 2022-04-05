@@ -179,6 +179,8 @@ def detail_viewx(request, id):
     idfilter  = checkInData.studentId = id
     
     data = customerInfo.objects.get(studentId = id)
+    aPKG = customerInfo.objects.filter(studentId = id)
+
     
     today = date.today()
     qw = checkInData.objects.filter(checkInDate__day=today.day).filter(studentId = id)
@@ -240,8 +242,7 @@ def detail_viewx(request, id):
     context = {'data':data,'bees':f"{bees}",'xx':xx,'aa':aa,'cc':cc,'today':today,
     'qw':qw ,'vv':vv,'vv2':vv2,'sql':sql,'idfilter':idfilter,'activePackage':activePackage,
     'totalClass':totalClass,'remaingclass':remaingclass,'xxc':xxc,'qwe':qwe,'xxc2':xxc2,
-    'qwe2':qwe2 , "final":final , 'x1':x1 , 'x2':x2 ,'packA':packA
-        }
+    'qwe2':qwe2 , "final":final , 'x1':x1 , 'x2':x2 ,'packA':packA,'aPKG':aPKG}
     return render(request, "student/dtl_multi.html", context)
 
 

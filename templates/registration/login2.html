@@ -1,0 +1,34 @@
+
+
+
+{% if forms.error %}
+
+<p>user name or password not correct </p>
+
+{% endif %}
+
+{% if next %}
+
+  {% if user.authenticated %}
+  <p> you don't have permission for this page</p>
+  {% else %}
+  <p> please login </p>
+
+  {% endif %}
+
+  {% endif %}
+
+
+    <br>
+
+  <form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  {{form.username.label_tag}}
+    {{form.username}}
+  {{form.username.label_tag}}
+  {{form.password}}
+
+    <input type="submit" value='login'>
+    <input type="hidden" name='next' value="{{next}}">
+
+</form>
