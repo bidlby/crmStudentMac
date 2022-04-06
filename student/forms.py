@@ -1,9 +1,5 @@
 
-from datetime import datetime
-from faulthandler import disable
-from multiprocessing.sharedctypes import Value
-from tkinter import Widget
-from turtle import textinput, width
+
 from django import forms
 from .models import customerInfo , checkInData  , studioPackages  , AssignPackage , customersPayments
 from django.forms import ChoiceField, ModelForm, Textarea , TextInput 

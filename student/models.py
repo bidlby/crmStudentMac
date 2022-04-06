@@ -1,6 +1,4 @@
 import datetime
-from operator import mod
-from tkinter import CASCADE
 from django.db import NotSupportedError, models
 from datetime import datetime
 from django.utils import timezone
