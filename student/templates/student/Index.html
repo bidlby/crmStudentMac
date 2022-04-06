@@ -50,13 +50,49 @@
 </form>
     <br>
 
-
-    <h2>Follow Up List</h2>
-    {% for x in followUpList %}
-    <li> <a  href="/student/dashBoard/{{x.studentId}}">{{x.studentId}}</a> {{x.contactDate}} , {{x.customerName}} , {{x.leadsChannel}} , {{x.leadsContactNumber}} , {{x.intersetList}}, {{x.followUp}} ,{{x.leadeAge}} </li>
-    {% endfor %}
-
+<h3>Quick List</h3>
   
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Customer Name</th>
+      <th scope="col">Lead Channel</th>
+      <th scope="col">Urgent</th>
+      <th scope="col">Contact Date</th>
+      <th scope="col">Contact Number</th>
+      <th scope="col">Age</th>
+      <th scope="col">Assign PKG</th>
+      <th scope="col">Edit Info</th>
+
+    </tr>
+  </thead>
+  {% for x in followUpList %}
+  <tbody>
+    <tr>
+      <th scope="row"><a href="/student/dashBoard/{{x.studentId}}">{{x.studentId}} </th></a>
+      <td>{{x.customerName}} </td>
+      <td>{{x.leadsChannel}}</td>
+
+       {% if x.leadsUrgent == True %}
+      <td>Yes</td>
+        {% else %}
+      <td>No</td>
+        {% endif %}
+
+        
+      <td>{{x.contactDate}}</td>
+      <td>{{x.leadsContactNumber}}</td>
+      <td>{{x.leadeAge}}</td>
+
+
+
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:assignPKG' x.studentId %}'">Assign Package</button></td>
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:updateView' x.studentId %}'">Edit Info</button></td>
+    </tr>
+  </tbody>
+  {% endfor %}
+</table>
    
 
     {% endblock %}
