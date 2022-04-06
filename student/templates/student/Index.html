@@ -3,36 +3,26 @@
 
 
 {% block content %}
-<ul>
-    <li><a href="{% url 'student:CustList' %}">Customer List</a></li>
-    <li><a href="{% url 'student:NewReg' %}">New Registration</a></li>
-    <li><a href="{% url 'student:CustInfo2'%}">customer List & SQL </a></li>
-    <li><a href="{% url 'student:checkIn' %}">Check In</a></li>
-    <li><a href="{% url 'student:CheckInByName' %}">Check In by Name</a></li>
-    <li><a href="{% url 'student:soa' %}">SOA</a></li>
-    <li><a href="{% url 'student:customerFollowUp' %}">Follow Up</a></li>
-    <li><a href="{% url 'student:pakcageList' %}">Packages</a></li>
-    <li><a href="{% url 'student:testAny' %}">testAny</a></li>
-
-
-
-    
-    <br>
-
-    follow up section : 
+    <div class="container">
+      
+    </div>
 
     <div class="container">
 
         <br>
         <h2>Active Package List</h2>
         <br>
+        <div class="input-group mb-3">
         <form method="POST">
             {% csrf_token %}
-         Age Filter : <input type="string" name="age" id="">
-         Course Filter : <input type="string" name="course" id="">
+            <label for="basic-url" class="form-label">Age Filter</label>
+             <input class="form-control" type="string" name="age" id="">
+             <label for="basic-url" class="form-label"> Course Filter :</label>
+         <input class="form-control" type="string" name="course" id="">
+         <br>
 
-        <input type="submit" value="search">
-  
+        <input class="btn btn-outline-secondary  form-control" type="submit" value="search">
+      </div>
   <table class="table">
 
     <thead>
@@ -66,7 +56,8 @@
     <li> <a  href="/student/dashBoard/{{x.studentId}}">{{x.studentId}}</a> {{x.contactDate}} , {{x.customerName}} , {{x.leadsChannel}} , {{x.leadsContactNumber}} , {{x.intersetList}}, {{x.followUp}} ,{{x.leadeAge}} </li>
     {% endfor %}
 
-    
+  
+   
 
+    {% endblock %}
 
-{% endblock %}

@@ -11,6 +11,11 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'student:home' %}">Home</a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'student:checkIn' %}">Check In</a>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link" href="{% url 'student:CustList' %}">Student List</a>
           </li>
@@ -39,6 +44,26 @@
               <li><a class="dropdown-item" href="{% url 'student:soa' %}">New Payment</a></li>
             </ul>
           </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Other Links
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'student:CustList' %}">Customer List</a></li>
+              <li><a class="dropdown-item" href="{% url 'student:NewReg' %}">New Registration</a></li>
+              <li><a class="dropdown-item disabled" href="{% url 'student:CustInfo2'%}">customer List & SQL </a></li>
+              <li><a class="dropdown-item" href="{% url 'student:checkIn' %}">Check In</a></li>
+              <li><a class="dropdown-item disabled" href="{% url 'student:CheckInByName' %}">Check In by Name</a></li>
+              <li><a class="dropdown-item disabled" href="{% url 'student:soa' %}">SOA</a></li>
+              <li><a class="dropdown-item" href="{% url 'student:customerFollowUp' %}">Follow Up</a></li>
+              <li><a class="dropdown-item" href="{% url 'student:pakcageList' %}">Packages</a></li>
+              <li><a class="dropdown-item disabled" href="{% url 'student:testAny' %}">testAny</a></li>
+
+            </ul>
+          </li>
+
+
         </ul>
         <form class="d-flex" method="POST" action="{% url 'student:search' %}">
           {% csrf_token %}
