@@ -1,0 +1,96 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+<div class="">
+    <div class="row align-items-start">
+      <div class="col">
+        <h2 class="container-fluid">Remaining Classes by Customer</h2>
+        <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+        <div class="container">   
+            <div id="toolbar">
+                    <select class="form-control">
+                            <option value="">Export Basic</option>
+                            <option value="all">Export All</option>
+                            <option value="selected">Export Selected</option>
+                    </select>
+            </div>
+            
+            <table id="table" 
+                         data-toggle="table"
+                         data-search="true"
+                         data-filter-control="true" 
+                         data-show-export="true"
+                         data-click-to-select="true"
+                         data-toolbar="#toolbar">
+                <thead>
+                    <tr>
+                        <th data-field="prenom" data-filter-control="input" data-sortable="true">ID</th>
+                        <th data-field="date" data-filter-control="select" data-sortable="true">Customer Name</th>
+                        <th data-field="examen" data-filter-control="select" data-sortable="true">Total Classes</th>
+                        <th data-field="note" data-sortable="true">Total Check In</th>
+                        <th data-sortable="true">Remaining</th>
+                        <th data-sortable="true">Comment</th>
+                    </tr>
+                </thead>
+
+                <style>
+                    h1 {color:red;}
+                    p {color:blue;}
+                    </style>
+
+                <tbody>
+                    {% for x in NetClasses %}
+                    <tr>
+                        <td><a href="/student/dashBoard/{{x.studentId}}">{{x.studentId}}</a></td>
+                        <td>{{x.customerName}}</td>
+                        <td>{{x.total}}</td>
+                        <td>{{x.total_checkIn}}</td>
+                        <td>{{x.net}}</td>
+                        {% if x.net <= 5 %}
+                        <td style="color:Red;" >Follow UP !</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+      </div>
+      <div class="col">
+        One of three columns
+      </div>
+      <div class="col">
+        One of three columns
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <div class="col">
+        One of three columns
+      </div>
+      <div class="col">
+        One of three columns
+      </div>
+      <div class="col">
+        One of three columns
+      </div>
+    </div>
+    <div class="row align-items-end">
+      <div class="col">
+        One of three columns
+      </div>
+      <div class="col">
+        One of three columns
+      </div>
+      <div class="col">
+        One of three columns
+      </div>
+    </div>
+  </div> 
+
+{% endblock %}

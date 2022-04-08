@@ -56,6 +56,7 @@ class FollowUpModel(models.Model):
     comments = models.CharField(max_length=200)
     callBackOn = models.DateField()
     gb1 = models.BooleanField(default=False)
+    gb2 = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.studentId} , {self.comments}"

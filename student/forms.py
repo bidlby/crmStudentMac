@@ -1,9 +1,10 @@
 
 
 from django import forms
-from .models import customerInfo , checkInData  , studioPackages  , AssignPackage , customersPayments
+from .models import customerInfo , checkInData  , studioPackages  , AssignPackage , customersPayments , FollowUpModel
 from django.forms import ChoiceField, ModelForm, Textarea , TextInput 
 from django.contrib.admin.widgets import AdminDateWidget
+
 
 class newStudent(forms.ModelForm):
     #customerName = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
@@ -92,7 +93,7 @@ class assignPKGform(forms.ModelForm):
             'packageName': forms.Select(attrs={'placeholder': 'Package Name' , 'class':'form-control'}),
             'startDate': forms.DateInput(attrs={'class':'form-control'}),
             'endDate': forms.DateInput(attrs={'class':'form-control'}),
-            'StudentId':forms.Textarea(attrs={'hidden':'True'})
+            'StudentId':forms.Textarea(attrs={'hidden':'False'})
         }
 
     def __init__(self,*args, **kwargs):
@@ -117,4 +118,24 @@ class PaymentForm(forms.ModelForm):
                 'style': 'width:16ch',
                 'placeholder':'Enter Amount'}),
             'StudentId':forms.Textarea(attrs={'hidden':'True'})
+        }
+
+
+class followUpForm(forms.ModelForm):
+    class Meta:
+        model = FollowUpModel
+        fields = ('studentId','commentDate','comments','callBackOn','gb1')
+        labels = {
+            'studentId' : '',
+            'commentDate' : 'Date',
+            'comments' : 'comments',
+            'callBackOn' : 'Call Back Date',
+            'gb1' : 'Completed ?',
+        }
+        widgets = {'studentId': forms.HiddenInput()}
+        Widget = {
+            'packageName': forms.Select(attrs={'placeholder': 'Package Name' , 'class':'form-control'}),
+            'commentDate': forms.DateInput(attrs={'class':'form-control datetimepicker-input',
+            'data-target': '#datetimepicker1'}),
+            'comments':forms.Textarea(attrs={'class':'form-control'}),
         }

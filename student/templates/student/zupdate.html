@@ -29,22 +29,20 @@
                      data-search="true"
                      data-filter-control="true" 
                      data-show-export="true"
-                     data-click-to-select="true"
+                     data-click-to-select="false"
                      data-toolbar="#toolbar">
             <thead>
                 <tr>
-                    <th data-field="state" data-checkbox="false"></th>
                     <th data-field="prenom" data-filter-control="input" data-sortable="true">ID</th>
                     <th data-field="date" data-filter-control="select" data-sortable="true">Customer Name</th>
                     <th data-field="examen" data-filter-control="select" data-sortable="true">Total Classes</th>
                     <th data-field="note" data-sortable="true">Total Check In</th>
-                    <th data-field="note" data-sortable="true">Remaining Classes</th>
+                    <th data-sortable="true">Remaining</th>
                 </tr>
             </thead>
             <tbody>
                 {% for x in NetClasses %}
                 <tr>
-                    <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
                     <td>{{x.studentId}} </td>
                     <td>{{x.customerName}}</td>
                     <td>{{x.total}}</td>
@@ -56,21 +54,5 @@
         </table>
         </div>
 
-        <script>
-            var $table = $('#table');
-    $(function () {
-        $('#toolbar').find('select').change(function () {
-            $table.bootstrapTable('refreshOptions', {
-                exportDataType: $(this).val()
-            });
-        });
-    })
-
-		var trBoldBlue = $("table");
-
-	$(trBoldBlue).on("click", "tr", function (){
-			$(this).toggleClass("bold-blue");
-	});
-        </script>
 
     {%  endblock %}

@@ -1,7 +1,7 @@
 
 from django.shortcuts import redirect, render
 from student.models import customerInfo 
-from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm
+from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm , followUpForm
 from django.contrib import messages
 from django.views.generic import DetailView, UpdateView , ListView , TemplateView , CreateView
 from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount , customersPayments ,FollowUpModel
@@ -527,6 +527,37 @@ def updateFollowFlag(request,pk):
     a = customerInfo.objects.filter(studentId = pk).update(followUp = False)
 
     return render(request,'student/zupdatex.html',{'a':a})
+
+
+## to do list
+
+def toDolist(request):
+
+    NetClasses = customerPerformance.objects.raw('select c.studentId, c.customerName , sum(b.numberOfLessons) as total , c.total_checkIn , sum(b.numberOfLessons) - c.total_checkIn as net from student_AssignPackage a , student_studioPackages b , customerPerformance c  where  a.packageName_id = b.packageId and c.studentid = a.studentid_id group by c.customerName , a.studentId_id order by sum(b.numberOfLessons) - c.total_checkIn asc')
+
+    return render(request,'student/toDoList.html',{'NetClasses':NetClasses})
+
+## follow Up View:
+
+class followUpView(CreateView):
+    model = FollowUpModel
+    form_class = followUpForm
+    template_name = 'student/followUpComment.html'
+
+    def get_initial(self):
+        studentId = get_object_or_404(customerInfo, pk=self.kwargs['pk'])
+
+        return {
+        'studentId': studentId,
+        }
+
+    def get_context_data(self, **kwargs):
+       context = super(followUpView, self).get_context_data(**kwargs)
+       context['queryset'] = customerInfo.objects.filter(pk=self.kwargs['pk'])
+       return context
+
+    def get_success_url(self):
+        return reverse('student:CustList')
 
 ### Reports:
 def dailyReports(request):

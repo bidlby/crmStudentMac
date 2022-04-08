@@ -3,15 +3,8 @@
 
 
 {% block content %}
-    <div class="container">
-      
-    </div>
-
-    <div class="container">
-
-        <br>
+    <div class="container-lg">
         <h2>Active Package List</h2>
-        <br>
         <div class="input-group mb-3">
         <form method="POST">
             {% csrf_token %}
@@ -64,6 +57,8 @@
       <th scope="col">Age</th>
       <th scope="col">Assign PKG</th>
       <th scope="col">Edit Info</th>
+      <th scope="col">Comments</th>
+
 
     </tr>
   </thead>
@@ -89,11 +84,14 @@
 
       <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:assignPKG' x.studentId %}'">Assign Package</button></td>
       <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:updateView' x.studentId %}'">Edit Info</button></td>
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:followUpView' x.studentId %}'">Add Comment</button></td>
+
     </tr>
   </tbody>
   {% endfor %}
 </table>
    
+
 
     {% endblock %}
 
