@@ -56,7 +56,10 @@ urlpatterns = [
     path('pakcageList/',views.packageList,name='pakcageList'),
     path('pakcageReport/',views.pakcageReport , name='pakcageReport'),
     path('customerAttendance/',views.customerAttendance , name='customerAttendance'),
-    path('testAny',views.testAny,name='testAny')
+    path('testAny',views.testAny,name='testAny'),
+    path('updateFollowFlag/<int:pk>',views.updateFollowFlag,name='updateFollowFlag'),
+    path('dailyReports/',views.dailyReports,name='dailyReports'),
+
 
     
 ]

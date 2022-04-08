@@ -1,0 +1,76 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<script src="{% static 'javascript.js' %}"></script>
+<script type="text/javascript" src="tableExport.js"></script>
+<script type="text/javascript" src="jquery.base64.js"></script>
+
+    <h1>Daily Report for {{ dailyCheckInReport.0.checkInDate }}</h1>
+
+{% for x in dailyCheckInReport %}
+<li>{{x.checkInDate}} {{x.customerName}} {{x.count}} </li>
+{% endfor %}
+
+
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+    <div class="container">   
+        <div id="toolbar">
+                <select class="form-control">
+                        <option value="">Export Basic</option>
+                        <option value="all">Export All</option>
+                        <option value="selected">Export Selected</option>
+                </select>
+        </div>
+        
+        <table id="table" 
+                     data-toggle="table"
+                     data-search="true"
+                     data-filter-control="true" 
+                     data-show-export="true"
+                     data-click-to-select="true"
+                     data-toolbar="#toolbar">
+            <thead>
+                <tr>
+                    <th data-field="state" data-checkbox="false"></th>
+                    <th data-field="prenom" data-filter-control="input" data-sortable="true">ID</th>
+                    <th data-field="date" data-filter-control="select" data-sortable="true">Customer Name</th>
+                    <th data-field="examen" data-filter-control="select" data-sortable="true">Total Classes</th>
+                    <th data-field="note" data-sortable="true">Total Check In</th>
+                    <th data-field="note" data-sortable="true">Remaining Classes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for x in NetClasses %}
+                <tr>
+                    <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
+                    <td>{{x.studentId}} </td>
+                    <td>{{x.customerName}}</td>
+                    <td>{{x.total}}</td>
+                    <td>{{x.total_checkIn}}</td>
+                    <td>{{x.net}}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <script>
+            var $table = $('#table');
+    $(function () {
+        $('#toolbar').find('select').change(function () {
+            $table.bootstrapTable('refreshOptions', {
+                exportDataType: $(this).val()
+            });
+        });
+    })
+
+		var trBoldBlue = $("table");
+
+	$(trBoldBlue).on("click", "tr", function (){
+			$(this).toggleClass("bold-blue");
+	});
+        </script>
+
+    {%  endblock %}

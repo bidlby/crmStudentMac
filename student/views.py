@@ -519,3 +519,33 @@ def customerAttendance(request):
 
 def testAny(request):
     return render(request,'student/testPyAnyWhere.html',{})
+
+
+## update value 
+
+def updateFollowFlag(request,pk):
+    a = customerInfo.objects.filter(studentId = pk).update(followUp = False)
+
+    return render(request,'student/zupdatex.html',{'a':a})
+
+### Reports:
+def dailyReports(request):
+
+    currDay = date.today()
+
+    dailyCheckInReport = customerInfo.objects.raw(
+       'SELECT b.checkInDate , a.studentid , a.customerName , count(b.checkIn) as count FROM STUDENT_customerInfo a ,student_checkindata b where a.studentid = b.studentid and checkInDate =  %s group by a.studentid , a.customerName , b.checkInDate',[currDay])
+
+    ## Remianing Classes
+
+    NetClasses = customerPerformance.objects.raw('select c.studentId, c.customerName , sum(b.numberOfLessons) as total , c.total_checkIn , sum(b.numberOfLessons) - c.total_checkIn as net from student_AssignPackage a , student_studioPackages b , customerPerformance c  where  a.packageName_id = b.packageId and c.studentid = a.studentid_id group by c.customerName , a.studentId_id order by sum(b.numberOfLessons) - c.total_checkIn asc')
+
+
+
+    context = {'NetClasses':NetClasses,'dailyCheckInReport':dailyCheckInReport}
+
+    return render(request,'student/zupdate.html',context)
+
+
+
+   
