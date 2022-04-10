@@ -60,7 +60,8 @@ urlpatterns = [
     path('updateFollowFlag/<int:pk>',views.updateFollowFlag,name='updateFollowFlag'),
     path('dailyReports/',views.dailyReports,name='dailyReports'),
     path('toDolist/',views.toDolist,name='toDolist'),
-    path('list/followUpView/<int:pk>',views.followUpView.as_view(),name='followUpView')
+    path('list/followUpView/<int:pk>',views.followUpView.as_view(),name='followUpView'),
+    path('freetryList/',views.freetryList,name='freetryList')
 
 
 ]

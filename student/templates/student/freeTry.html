@@ -1,0 +1,24 @@
+{% extends 'student/base.html' %}
+
+
+
+{% block content %}
+
+{% for x in q1 %}
+<li>{{x.StudentId}} -- {{x.packageName}}</li>
+{% endfor %}
+
+<br>
+<br>
+
+follow up filter
+
+<br>
+<br>
+{% for x in q2 %}
+<li>{{x.StudentId}}</li>
+<li>{{x.packageName}}</li>
+
+{% endfor %}
+
+{% endblock %}

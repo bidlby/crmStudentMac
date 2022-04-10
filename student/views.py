@@ -578,5 +578,18 @@ def dailyReports(request):
     return render(request,'student/zupdate.html',context)
 
 
+## Free Try Out :
+
+def freetryList(request):
+
+
+    q1 = AssignPackage.objects.filter(StudentId__studentId = 9).exclude(packageName__packageId = 2)
+
+    q2 = AssignPackage.objects.exclude(packageName = 1)
+
+
+    context = {'q1':q1,'q2':q2}
+
+    return render(request,'student/freeTry.html',context)
 
    
