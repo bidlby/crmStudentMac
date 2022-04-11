@@ -6,9 +6,10 @@
 
 <br>
 
-<h1>soa_summery.html</h1>
+<h1></h1>
 
-<div class="container">
+<div class="container-lg">
+  <h1>Open Balance Statment: - soa_summery.html</h1>
     {% for x in customerName %}
  <h2>Statment of Account Customer :  <h1>{{x.customerName}}</h1> </h2> 
  <style>
@@ -18,14 +19,13 @@
     {% endfor %}
     <br>
 </div>
-<table class="table container">
+<table class="table container-lg">
     <thead class="thead-dark">
       <tr>
         <th scope="col">ID</th>
         <th scope="col">Customer Name</th>
         <th scope="col">Last Payment</th>
         <th scope="col">Detailes </th>
-        <th scope="col">Ref </th>
         <th scope="col">Credit</th>
         <th scope="col">Debit</th>
         <th scope="col">Open Amount</th>
@@ -38,7 +38,6 @@
         <td>{{x.customerName}} </td>
         <td>{{x.lastTrx}}</td>
         <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:soa_PK' x.studentId %}'">Account</button></td>
-        <td>{{x.Payment_Ref}}</td>
         <td>{{x.credit}}</td>
         <td>{{x.debit}}</td>
         <td>{{x.openBalance}}</td>
@@ -50,11 +49,10 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
             <td><b>TOTAL AMOUNT:</b> </td>
           <td><b> AED {{TotalCredit.credits}}</b></td>
           <td><b> AED {{Totaldebit.debits}}</b></td>
-          <td><b> AED </b></td>
+          <td><b> AED {{TotalOpenAmount.openAmount}}</b></td>
 
         </tr>
       </tfoot>

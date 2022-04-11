@@ -1,4 +1,6 @@
 
+from calendar import month
+from math import fabs
 from django.shortcuts import redirect, render
 from student.models import customerInfo 
 from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm , followUpForm
@@ -406,13 +408,18 @@ def dbview(request):
 ## customer Account Balance 
 
 def customerSOASummary(request):
-    queryset1 = customerPaymentAccount.objects.all()
-    queryset = customerPaymentAccount.objects.values('customerName','studentId').annotate(credit = Sum('credit')).annotate(debit=Sum('debit')).annotate(openBalance=F('credit') - F('debit')).annotate(lastTrx = Max('transactionDate'))
 
-    TotalCredit = customerPaymentAccount.objects.aggregate(credits = Sum('credit'))
-    Totaldebit = customerPaymentAccount.objects.aggregate(debits = Sum('debit'))
-    TotalOpenAmount = customerPaymentAccount.objects.annotate(OpenAmount = F('credit') - F('debit'))
+    queryset = customerPaymentAccount.objects.values('customerName','studentId').annotate(credit = Sum('credit')).annotate(debit=Sum('debit')).annotate(openBalance=F('credit') - F('debit')).annotate(lastTrx = Max('transactionDate')).exclude(openBalance = 0).order_by('-openBalance','lastTrx')
 
+    customerOpenAmount = queryset.values('studentId')
+
+
+    TotalCredit = customerPaymentAccount.objects.filter(studentId__in = customerOpenAmount).aggregate(credits = Sum('credit'))
+    Totaldebit = customerPaymentAccount.objects.filter(studentId__in = customerOpenAmount).aggregate(debits = Sum('debit'))
+    TotalOpenAmount = customerPaymentAccount.objects.aggregate(openAmount = Sum('credit') - Sum('debit'))
+
+    print(TotalOpenAmount)
+    
 
     try:
         openBalance = queryset['credit'] - queryset['debit']
@@ -420,7 +427,7 @@ def customerSOASummary(request):
         openBalance = 0 
     
     try:
-        xxx = TotalOpenAmount['OpenAmount']
+        xxx = TotalOpenAmount['balance']
     except Exception as e:
         xxx = 'None'
 
@@ -446,13 +453,15 @@ def customerSOA(request,pk):
         showresult = customerPaymentAccount.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate,studentId=pk)
 
         context = {'queryset':queryset,'customerName':customerName,
-               'openBalance':openBalance , 'totalCredit':totalCredit , 'totalDebit':totalDebit,'showresult':showresult}
+               'openBalance':openBalance , 'totalCredit':totalCredit , 
+               'totalDebit':totalDebit,'showresult':showresult}
         #showresult = customerPaymentAccount.objects.raw('select * student_customerspayments where transactionDate >= "'+fromdate+'" and transactionDate <= "'+todate+'" and studentId = %s' ,[pk])
         return render(request,'student/soa.html',context)
     else:
         showresult = customerPaymentAccount.objects.filter(studentId=pk)
         context = {'queryset':queryset,'customerName':customerName,
-               'openBalance':openBalance , 'totalCredit':totalCredit , 'totalDebit':totalDebit,'showresult':showresult}
+               'openBalance':openBalance , 'totalCredit':totalCredit ,
+                'totalDebit':totalDebit,'showresult':showresult}
         return render(request,'student/soa.html',context)
 
 def customerSOA2(request):
@@ -485,23 +494,33 @@ def pakcageReport(request):
     
 
     TotalPkgSaleMonhtly = AssignPackage.objects.annotate(month = TruncMonth('transactionDate')).values('month').annotate(tp = Count('packageName_id')).annotate(tm = Sum('packageName__packagePrice')).filter(packageName__packagePrice__gte = 1).order_by('-month')
-    packageSoldTotal = AssignPackage.objects.filter(packageName__packagePrice__gte = 1).aggregate(tCount = Count('packageName_id'),tm = Sum('packageName__packagePrice'))
 
+    packageSoldTotal = AssignPackage.objects.filter(packageName__packagePrice__gte = 2).aggregate(tCount = Count('packageName_id'),tm = Sum('packageName__packagePrice'))
 
-
-    print(TotalPkgSaleMonhtly)
 
     if request.method == 'POST':
+
         fromdate = request.POST['fromdate']
         todate = request.POST['todate']
+
         packageSold2 = AssignPackage.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate).select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice')).order_by('-transactionDate').filter(packageName__packagePrice__gte = 1)
+
         total_PKG = AssignPackage.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate,packageName__packagePrice__gte = 1).aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
-        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2,'TotalPkgSaleMonhtly' :TotalPkgSaleMonhtly,'packageSoldTotal':packageSoldTotal}
+
+        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2,
+                    'TotalPkgSaleMonhtly' :TotalPkgSaleMonhtly,
+                    'packageSoldTotal':packageSoldTotal}
         return render(request,'student/packageReport.html',context)
     else:
-        packageSold2 = AssignPackage.objects.select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice')).order_by('-transactionDate').filter(packageName__packagePrice__gte = 1)
-        total_PKG = AssignPackage.objects.filter(packageName__packagePrice__gte = 1).aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
-        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2,'TotalPkgSaleMonhtly':TotalPkgSaleMonhtly,'packageSoldTotal':packageSoldTotal}
+        today = date.today()
+
+        packageSold2 = AssignPackage.objects.select_related('packageName_id').values_list('packageName__PakageName','packageName__packagePrice','transactionDate').annotate(total=Count('packageName'),total_amount=Sum('packageName__packagePrice')).order_by('-transactionDate').filter(packageName__packagePrice__gte = 1).filter(transactionDate__month = today.month , transactionDate__year = today.year)
+
+        total_PKG = AssignPackage.objects.filter(packageName__packagePrice__gte = 1, transactionDate__month = today.month , transactionDate__year = today.year).aggregate(tCount = Count('StudentId'), tAmount = Sum('packageName__packagePrice'))
+
+        context = {'total_PKG':total_PKG ,'packageSold2':packageSold2,
+                    'TotalPkgSaleMonhtly':TotalPkgSaleMonhtly,
+                    'packageSoldTotal':packageSoldTotal}
         return render(request,'student/packageReport.html',context)
 
 ### Performance Report :
@@ -518,7 +537,9 @@ def customerAttendance(request):
 ## test to https://bees.pythonanywhere.com/checkIn/
 
 def testAny(request):
-    return render(request,'student/testPyAnyWhere.html',{})
+    curMonth = date.today()
+
+    return render(request,'student/testPyAnyWhere.html',{'curMonth':curMonth})
 
 
 ## update value 
@@ -533,7 +554,7 @@ def updateFollowFlag(request,pk):
 
 def toDolist(request):
 
-    NetClasses = customerPerformance.objects.raw('select c.studentId, c.customerName , sum(b.numberOfLessons) as total , c.total_checkIn , sum(b.numberOfLessons) - c.total_checkIn as net from student_AssignPackage a , student_studioPackages b , customerPerformance c  where  a.packageName_id = b.packageId and c.studentid = a.studentid_id group by c.customerName , a.studentId_id order by sum(b.numberOfLessons) - c.total_checkIn asc')
+    NetClasses = customerPerformance.objects.raw('select c.studentId, c.customerName , sum(b.numberOfLessons) as total , c.total_checkIn , sum(b.numberOfLessons) - c.total_checkIn as net from student_AssignPackage a , student_studioPackages b , customerPerformance c  where  a.packageName_id = b.packageId and c.studentid = a.studentid_id and b.freeTry = 0 group by c.customerName , a.studentId_id order by sum(b.numberOfLessons) - c.total_checkIn asc')
 
     return render(request,'student/toDoList.html',{'NetClasses':NetClasses})
 
@@ -582,13 +603,17 @@ def dailyReports(request):
 
 def freetryList(request):
 
+    anyPkg = AssignPackage.objects.values('StudentId_id')
+    pricedList = studioPackages.objects.filter(freeTry = True)
+    studentPricedList = AssignPackage.objects.exclude(packageName__in = pricedList).values('StudentId')
+    studentWithPricedPkg = customerInfo.objects.filter(studentId__in = studentPricedList)
 
-    q1 = AssignPackage.objects.filter(StudentId__studentId = 9).exclude(packageName__packageId = 2)
+    withNoPkg =  customerInfo.objects.exclude(studentId__in = anyPkg).filter(followUp = True)
 
-    q2 = AssignPackage.objects.exclude(packageName = 1)
+    freeTryList = customerInfo.objects.exclude(studentId__in = studentWithPricedPkg).exclude(studentId__in = withNoPkg).filter(followUp = True)
 
 
-    context = {'q1':q1,'q2':q2}
+    context = {'freeTryList':freeTryList,'withNoPkg':withNoPkg}
 
     return render(request,'student/freeTry.html',context)
 

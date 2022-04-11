@@ -3,9 +3,7 @@
 {% load static %}
 
 {% block content %}
-
-
-<div class="container rounded bg-white mt-5 mb-5">
+<div class="container-lg rounded bg-white mt-5 mb-5">
     <div class="row">
         <div class="col-md-3 border-right">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="{% static 'student/123.jpeg' %}"><span class="font-weight-bold"><h3>{{data.customerName}}</h3></span>
@@ -31,22 +29,22 @@
                     <div class="col-md-6"><label class="labels">Intrest In ?</label><input type="text" class="form-control" value="{{data.intersetList}}" placeholder="{{data.intersetIn}}"></div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value="{{data.leadsContactNumber}}"> <br></div>
-                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="form-control" placeholder="enter address line 1" value="{{data.leadsLocation}}"> <br></div> <br>
+                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="" value="{{data.leadsContactNumber}}"> <br></div>
+                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="form-control" placeholder="" value="{{data.leadsLocation}}"> <br></div> <br>
                     <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value="{{data.emailAddress}}"> <br></div> <br>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value="{{data.Nationality}}"></div>
+                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="" value="{{data.Nationality}}"></div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="p-3 py-5">
-                <div class="col-md-12"><label class="labels">First Check In</label><input type="text" class="form-control" placeholder="experience" value="{{xx.checkInDate}}"></div> <br>
-                <div class="col-md-12"><label class="labels">Last Check In</label><input type="text" class="form-control" placeholder="additional details" value="{{aa.checkInDate}}"></div> <br>
-                <div class="col-md-12"><label class="labels">Total Classes</label><input type="text" class="form-control" placeholder="additional details" value="{{x1}}"></div> <br>
-                <div class="col-md-12"><label class="labels">Total Attendance</label><input type="text" class="form-control" placeholder="additional details" value="{{x2}}"></div><br>
-                <div class="col-md-12"><label class="labels">Remaning Classes</label><input type="text" class="form-control" placeholder="additional details" value="{{final}}"></div> 
+                <div class="col-md-12"><label class="labels">First Check In</label><input type="text" class="form-control" placeholder="" value="{{xx.checkInDate}}"></div> <br>
+                <div class="col-md-12"><label class="labels">Last Check In</label><input type="text" class="form-control" placeholder="" value="{{aa.checkInDate}}"></div> <br>
+                <div class="col-md-12"><label class="labels">Total Classes</label><input type="text" class="form-control" placeholder="" value="{{x1}}"></div> <br>
+                <div class="col-md-12"><label class="labels">Total Attendance</label><input type="text" class="form-control" placeholder="" value="{{x2}}"></div><br>
+                <div class="col-md-12"><label class="labels">Remaning Classes</label><input type="text" class="form-control" placeholder="" value="{{final}}"></div> 
 
 
             </div>

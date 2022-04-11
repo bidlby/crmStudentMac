@@ -4,21 +4,108 @@
 
 {% block content %}
 
-{% for x in q1 %}
-<li>{{x.StudentId}} -- {{x.packageName}}</li>
-{% endfor %}
 
-<br>
-<br>
 
-follow up filter
+  <br>
+<div class="container-lg">
+    <h3>Follow Up List for Free Try </h3>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Customer Name</th>
+      <th scope="col">Lead Channel</th>
+      <th scope="col">Urgent</th>
+      <th scope="col">Contact Date</th>
+      <th scope="col">Contact Number</th>
+      <th scope="col">Age</th>
+      <th scope="col">Assign PKG</th>
+      <th scope="col">Edit Info</th>
+      <th scope="col">Comments</th>
 
-<br>
-<br>
-{% for x in q2 %}
-<li>{{x.StudentId}}</li>
-<li>{{x.packageName}}</li>
 
-{% endfor %}
+    </tr>
+  </thead>
+  {% for x in freeTryList %}
+  <tbody>
+    <tr>
+      <th scope="row"><a href="/student/dashBoard/{{x.studentId}}">{{x.studentId}} </th></a>
+      <td>{{x.customerName}} </td>
+      <td>{{x.leadsChannel}}</td>
+
+       {% if x.leadsUrgent == True %}
+      <td>Yes</td>
+        {% else %}
+      <td>No</td>
+        {% endif %}
+
+        
+      <td>{{x.contactDate}}</td>
+      <td>{{x.leadsContactNumber}}</td>
+      <td>{{x.leadeAge}}</td>
+
+
+
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:assignPKG' x.studentId %}'">Assign Package</button></td>
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:updateView' x.studentId %}'">Edit Info</button></td>
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:followUpView' x.studentId %}'">Add Comment</button></td>
+
+    </tr>
+  </tbody>
+  {% endfor %}
+</table>
+</div>
+
+<div class="container-lg">
+    <h3>New Lead </h3>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Customer Name</th>
+      <th scope="col">Lead Channel</th>
+      <th scope="col">Urgent</th>
+      <th scope="col">Contact Date</th>
+      <th scope="col">Contact Number</th>
+      <th scope="col">Age</th>
+      <th scope="col">Assign PKG</th>
+      <th scope="col">Edit Info</th>
+      <th scope="col">Comments</th>
+
+
+    </tr>
+  </thead>
+  {% for x in withNoPkg %}
+  <tbody>
+    <tr>
+      <th scope="row"><a href="/student/dashBoard/{{x.studentId}}">{{x.studentId}} </th></a>
+      <td>{{x.customerName}} </td>
+      <td>{{x.leadsChannel}}</td>
+
+       {% if x.leadsUrgent == True %}
+      <td>Yes</td>
+        {% else %}
+      <td>No</td>
+        {% endif %}
+
+        
+      <td>{{x.contactDate}}</td>
+      <td>{{x.leadsContactNumber}}</td>
+      <td>{{x.leadeAge}}</td>
+
+
+
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:assignPKG' x.studentId %}'">Assign Package</button></td>
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:updateView' x.studentId %}'">Edit Info</button></td>
+      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:followUpView' x.studentId %}'">Add Comment</button></td>
+
+    </tr>
+  </tbody>
+  {% endfor %}
+</table>
+</div>
+
+
+
 
 {% endblock %}

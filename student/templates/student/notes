@@ -83,3 +83,16 @@ group by a.studentId ,
        a.customerName,
        d.countryList , 
        c.sourceChannel
+
+
+
+CREATE VIEW [NetClasses]
+as
+select c.studentId, c.customerName , sum(b.numberOfLessons) as total , c.total_checkIn , 
+sum(b.numberOfLessons) - c.total_checkIn as net 
+from student_AssignPackage a , student_studioPackages b , customerPerformance c  
+where  a.packageName_id = b.packageId 
+and c.studentid = a.studentid_id 
+and b.freeTry = 0
+group by c.customerName , a.studentId_id 
+order by sum(b.numberOfLessons) - c.total_checkIn asc

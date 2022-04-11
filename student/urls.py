@@ -61,7 +61,9 @@ urlpatterns = [
     path('dailyReports/',views.dailyReports,name='dailyReports'),
     path('toDolist/',views.toDolist,name='toDolist'),
     path('list/followUpView/<int:pk>',views.followUpView.as_view(),name='followUpView'),
-    path('freetryList/',views.freetryList,name='freetryList')
+    path('freetryList/',views.freetryList,name='freetryList'),
+    path('py/',views.testAny,name='py'),
+
 
 
 ]

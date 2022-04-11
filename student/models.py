@@ -84,6 +84,7 @@ class studioPackages(models.Model):
     numberOfLessons = models.IntegerField()
     packagePrice = models.IntegerField()
     active = models.BooleanField(default=True)
+    freeTry = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return f"{self.PakageName}"

@@ -9,7 +9,7 @@
 <h1>soa.html</h1>
 
 
-<div class="container">
+<div class="container-lg">
     {% for x in customerName %}
  <h2>Statment of Account Customer :  <h1>{{x.customerName}}</h1> </h2> 
  <style>
@@ -19,7 +19,7 @@
 
     <br>
 </div>
-<div class="container">
+<div class="container-lg">
 <button class="btn btn-lg btn-danger" onclick="location.href='{% url 'student:AddPayment' x.studentId %}'" > Make Payment</a></button>
 <br>
 <br>
@@ -39,7 +39,7 @@ To : <input type="date" name="todate" id="end" required>
 
 </div>
 <br>
-<table class="table container">
+<table class="table container-lg">
     <thead>
       <tr>
         <th scope="col">ID</th>

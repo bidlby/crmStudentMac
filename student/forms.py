@@ -4,6 +4,9 @@ from django import forms
 from .models import customerInfo , checkInData  , studioPackages  , AssignPackage , customersPayments , FollowUpModel
 from django.forms import ChoiceField, ModelForm, Textarea , TextInput 
 from django.contrib.admin.widgets import AdminDateWidget
+from django.contrib.admin import widgets
+from django.forms.fields import DateField
+
 
 
 class newStudent(forms.ModelForm):
@@ -87,18 +90,20 @@ class assignPKGform(forms.ModelForm):
     class Meta:
         model = AssignPackage
         fields = ('StudentId','packageName','startDate','endDate')
-        labels = {'StudentId':''
+        endDate = forms.DateField(widget = forms.SelectDateWidget())
+        labels = {'StudentId':'' , 'endDate' : 'End Date'
             }
         widgets = {
             'packageName': forms.Select(attrs={'placeholder': 'Package Name' , 'class':'form-control'}),
             'startDate': forms.DateInput(attrs={'class':'form-control'}),
-            'endDate': forms.DateInput(attrs={'class':'form-control'}),
-            'StudentId':forms.Textarea(attrs={'hidden':'False'})
+            #'endDate': forms.DateInput(attrs={'class':'form-control'}),
+            'StudentId':forms.Textarea(attrs={'hidden':'False'}),
         }
 
     def __init__(self,*args, **kwargs):
         super(assignPKGform, self).__init__(*args, **kwargs)
         self.fields['packageName'].queryset = studioPackages.objects.filter(active = True)
+        self.fields['endDate'].widget = widgets.AdminDateWidget()
 
 class PaymentForm(forms.ModelForm):
     #StudentId = forms.CharField(label=)

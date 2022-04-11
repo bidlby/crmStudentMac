@@ -11,10 +11,10 @@
         <div class="input-group mb-3">
         <form method="POST">
             {% csrf_token %}
-            <label for="basic-url" class="form-label">Age Filter</label>
+             <label for="basic-url" class="form-label">Age Filter</label>
              <input class="form-control" type="string" name="age" id="">
              <label for="basic-url" class="form-label"> Course Filter :</label>
-         <input class="form-control" type="string" name="course" id="">
+          <input class="form-control" type="string" name="course" id="">
          <br>
 
         <input class="btn btn-outline-secondary  form-control" type="submit" value="search">
@@ -46,53 +46,6 @@
 </form>
     <br>
 
-<h3>Quick List</h3>
-  
-    <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Customer Name</th>
-      <th scope="col">Lead Channel</th>
-      <th scope="col">Urgent</th>
-      <th scope="col">Contact Date</th>
-      <th scope="col">Contact Number</th>
-      <th scope="col">Age</th>
-      <th scope="col">Assign PKG</th>
-      <th scope="col">Edit Info</th>
-      <th scope="col">Comments</th>
-
-
-    </tr>
-  </thead>
-  {% for x in followUpList %}
-  <tbody>
-    <tr>
-      <th scope="row"><a href="/student/dashBoard/{{x.studentId}}">{{x.studentId}} </th></a>
-      <td>{{x.customerName}} </td>
-      <td>{{x.leadsChannel}}</td>
-
-       {% if x.leadsUrgent == True %}
-      <td>Yes</td>
-        {% else %}
-      <td>No</td>
-        {% endif %}
-
-        
-      <td>{{x.contactDate}}</td>
-      <td>{{x.leadsContactNumber}}</td>
-      <td>{{x.leadeAge}}</td>
-
-
-
-      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:assignPKG' x.studentId %}'">Assign Package</button></td>
-      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:updateView' x.studentId %}'">Edit Info</button></td>
-      <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:followUpView' x.studentId %}'">Add Comment</button></td>
-
-    </tr>
-  </tbody>
-  {% endfor %}
-</table>
    
 
 
