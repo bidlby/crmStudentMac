@@ -5,17 +5,56 @@
 
 {% block content %}
 
-<div class="container"> 
+<div class="container-lg"> 
     {% for x in queryset %}
-    <h1>New Comment : </h1><h2>{{x.customerName}}</h2>
+    <h1>Comment list for :</h1><h2>{{x.customerName}}</h2>
     {% endfor %}
+
+    
+
+<br>
+
+
+<div class="container-lg">
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">comment Date</th>
+        <th scope="col">comments</th>
+        <th scope="col">callBackOn </th>
+        <th scope="col">completed</th>
+        <th scope="col">Edit comment</th>
+  
+      </tr>
+    </thead>
+    {% for x in commentList %}
+    <tbody>
+      <tr>
+        <th scope="row"><a href="/student/dashBoard/{{x.commentSeq}}">{{x.commentSeq}} </th></a>
+        <td>{{x.commentDate}} </td>
+        <td>{{x.comments}}</td>
+        <td>{{x.callBackOn}}</td>
+        {% if x.completed == True %}
+        <td>Yes</td>
+        {% else %}
+        <td>No</td>
+        {% endif %}
+        <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:followUpView' x.commentSeq %}'">Update</button></td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
 </div>
 
+<Br></Br>
 
-<div class="container">
+<h3>Add New Comment</h3>
+<div class="container-lg">
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.as_p}}
         <button class="btn btn-primary my-4" type="submit">Submit</button>
     </form>
 </div>

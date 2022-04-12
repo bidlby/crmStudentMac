@@ -1,6 +1,5 @@
 
 {% extends 'student/base.html' %}
-{% include 'student/navbar.html'%}
 {% load static %}
 
 {% block content %}
@@ -60,7 +59,7 @@
 </form>
     </div>
     <div class="col">
-      <h1>Year To Date Sales</h1>
+      <h1>Paid Packages Report:</h1>
      <br>
       <br>
       <br>
@@ -72,16 +71,17 @@
           <th scope="col">Total Amount </th>
         </tr>
       </thead>
-      {% for x in TotalPkgSaleMonhtly %}
+
       <tbody>
         <tr>
+          {% for x in TotalPkgSaleMonhtly %}
           <td>{{x.month|date:"F"}}-{{x.month|date:"Y"}}</td>
           <td> {{x.tp}}</td>
           <td>AED {{x.tm}}</td>
-          
         </tr>
+        {% endfor %}
       </tbody>
-      {% endfor %}
+
       <tfoot>
         <tr>
       
@@ -101,8 +101,6 @@
 
 
 </div>
-
-
 
 </div>
 

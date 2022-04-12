@@ -55,6 +55,7 @@ class FollowUpModel(models.Model):
     commentDate = models.DateField(default=datetime.now)
     comments = models.CharField(max_length=200)
     callBackOn = models.DateField()
+    completed = models.BooleanField(default=False)
     gb1 = models.BooleanField(default=False)
     gb2 = models.BooleanField(default=False)
 

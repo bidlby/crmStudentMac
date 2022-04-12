@@ -15,7 +15,6 @@ import time
 from django.shortcuts import get_object_or_404  
 from datetime import date, datetime, timedelta
 from django.utils.timezone import now
-import json
 from django.db import connection
 from django.db.models.functions import TruncMonth
 
@@ -575,10 +574,12 @@ class followUpView(CreateView):
     def get_context_data(self, **kwargs):
        context = super(followUpView, self).get_context_data(**kwargs)
        context['queryset'] = customerInfo.objects.filter(pk=self.kwargs['pk'])
+       context['commentList'] = FollowUpModel.objects.filter(studentId = self.kwargs['pk']).order_by('-commentSeq')
+
        return context
 
     def get_success_url(self):
-        return reverse('student:CustList')
+        return reverse('student:followUpView')
 
 ### Reports:
 def dailyReports(request):
@@ -605,15 +606,25 @@ def freetryList(request):
 
     anyPkg = AssignPackage.objects.values('StudentId_id')
     pricedList = studioPackages.objects.filter(freeTry = True)
+
+    studentfreeList = AssignPackage.objects.values('StudentId').annotate(tfree = Count('transactionDate')).filter(packageName__in = pricedList)
+
     studentPricedList = AssignPackage.objects.exclude(packageName__in = pricedList).values('StudentId')
+
     studentWithPricedPkg = customerInfo.objects.filter(studentId__in = studentPricedList)
 
     withNoPkg =  customerInfo.objects.exclude(studentId__in = anyPkg).filter(followUp = True)
 
     freeTryList = customerInfo.objects.exclude(studentId__in = studentWithPricedPkg).exclude(studentId__in = withNoPkg).filter(followUp = True)
 
+    TotalFreeMonhtly = AssignPackage.objects.annotate(month = TruncMonth('transactionDate')).values('month').annotate(tp = Count('packageName_id')).filter(packageName__packagePrice = 0)
 
-    context = {'freeTryList':freeTryList,'withNoPkg':withNoPkg}
+
+    totalPaidPkg = AssignPackage.objects.annotate(month = TruncMonth('transactionDate')).values('month').annotate(tFree = Count('transactionDate' , filter = Q(packageName__packagePrice = 0))).annotate(tPaid = Count('transactionDate' , filter = Q(packageName__packagePrice__gte = 1))).order_by('-month')
+ 
+
+
+    context = {'freeTryList':freeTryList,'withNoPkg':withNoPkg,'TotalFreeMonhtly':TotalFreeMonhtly,'totalPaidPkg':totalPaidPkg,'studentfreeList':studentfreeList}
 
     return render(request,'student/freeTry.html',context)
 
