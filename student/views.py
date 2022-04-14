@@ -607,10 +607,12 @@ def freetryList(request):
     anyPkg = AssignPackage.objects.values('StudentId_id')
     pricedList = studioPackages.objects.filter(freeTry = True)
 
-    studentfreeList = AssignPackage.objects.values('StudentId').annotate(tfree = Count('transactionDate')).filter(packageName__in = pricedList)
 
     studentPricedList = AssignPackage.objects.exclude(packageName__in = pricedList).values('StudentId')
+    studentFreeList = AssignPackage.objects.filter(packageName__in = pricedList).values('StudentId')
 
+
+    
     studentWithPricedPkg = customerInfo.objects.filter(studentId__in = studentPricedList)
 
     withNoPkg =  customerInfo.objects.exclude(studentId__in = anyPkg).filter(followUp = True)
@@ -619,12 +621,15 @@ def freetryList(request):
 
     TotalFreeMonhtly = AssignPackage.objects.annotate(month = TruncMonth('transactionDate')).values('month').annotate(tp = Count('packageName_id')).filter(packageName__packagePrice = 0)
 
+    feeListId = AssignPackage.objects.filter(StudentId__in = studentPricedList)
+
 
     totalPaidPkg = AssignPackage.objects.annotate(month = TruncMonth('transactionDate')).values('month').annotate(tFree = Count('transactionDate' , filter = Q(packageName__packagePrice = 0))).annotate(tPaid = Count('transactionDate' , filter = Q(packageName__packagePrice__gte = 1))).order_by('-month')
  
+    totalPaidPkgx = AssignPackage.objects.annotate(month = TruncMonth('transactionDate')).values('month').annotate(tFree = Count('transactionDate' , filter = Q(packageName__packagePrice = 0))).annotate(tPaid = Count('transactionDate', filter = Q(StudentId__in = studentFreeList , packageName__packagePrice__gt = 1))).order_by('-month')
 
 
-    context = {'freeTryList':freeTryList,'withNoPkg':withNoPkg,'TotalFreeMonhtly':TotalFreeMonhtly,'totalPaidPkg':totalPaidPkg,'studentfreeList':studentfreeList}
+    context = {'freeTryList':freeTryList,'withNoPkg':withNoPkg,'TotalFreeMonhtly':TotalFreeMonhtly,'totalPaidPkg':totalPaidPkg,'totalPaidPkgx':totalPaidPkgx,'feeListId':feeListId}
 
     return render(request,'student/freeTry.html',context)
 

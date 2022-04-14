@@ -137,11 +137,38 @@
 </div>
 
 <div>
-  {% for x in  studentfreeList %}
 
-  {{x.tfree}}
 
-  {% endfor %}
+</div>
+
+<div>
+<br>
+  <div class="container-lg">
+    <div class="col">
+      <h1>Free Package Vs Paid Comulative:</h1>
+     <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Transaction Date</th>
+          <th scope="col">Total Free Packages </th>
+          <th scope="col">Total Paid Packages </th>
+        </tr>
+      </thead>
+    
+      <tbody>
+        <tr>
+          {% for x in totalPaidPkgx %}
+          <td>{{x.month|date:"F"}}-{{x.month|date:"Y"}}</td>
+          <td> {{x.tFree}}</td>
+          <td> {{x.tPaid}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    
+      <tfoot>
+      </tfoot>
+      </table>
+    </div>
 
 </div>
 
