@@ -15,15 +15,16 @@ Including another URLconf
 """
 
 
-from django.urls import path, re_path 
+from django.urls import path
 from . import views
 from django.views.generic import RedirectView
-from django.views.static import serve 
 
 app_name = 'student'
 
 urlpatterns = [
-    path('',RedirectView.as_view(url='accounts/login')),
+    #path('',RedirectView.as_view(url='accounts/login')),
+    path('',RedirectView.as_view(url='home')),
+    path('accounts/logout',RedirectView.as_view(url='home')),
     path('base',views.base,name='base'),
     path('home/',views.followup,name = 'home'),
     path('NewReg/',views.NewStudentReg.as_view(),name='NewReg'),
@@ -63,6 +64,7 @@ urlpatterns = [
     path('list/followUpView/<int:pk>',views.followUpView.as_view(),name='followUpView'),
     path('freetryList/',views.freetryList,name='freetryList'),
     path('py/',views.testAny,name='py'),
+    path('studendAttendanceReport/<int:pk>',views.studendAttendanceReport , name='StudentAttendance')
 
 
 

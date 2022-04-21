@@ -55,6 +55,7 @@
     <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:soa_PK' x.studentId %}'">Account</button></td>
     <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:AddPayment' x.studentId %}'">Payments</button></td>
     <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:updateView' x.studentId %}'">Profile Update</button></td>
+    <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:StudentAttendance' x.studentId %}'">Attendance</button></td>
 
     {% endfor %}
 

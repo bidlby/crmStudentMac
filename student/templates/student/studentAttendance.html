@@ -1,0 +1,36 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<br>
+
+<div class="container-lg row">
+    <h2>Attendance Report In : {{studnetName.customerName}}</h2>
+    <div class=" container col">
+
+          <ul class="list-group">
+            <li class="list-group-item active" aria-current="true">Attendance Report In : {{studnetName.customerName}} </li>
+            {% for x in checkInDatebyStudent %}
+            <li class="list-group-item">{{x.checkInDate}}</li>
+            {% endfor %}
+          </ul>
+
+    </div>
+    <div class=" container col">
+        <h3 hidden>--</h3>
+        <ul class="list-group">
+            
+            <li class="list-group-item active" aria-current="true">Monthly Report</li>
+            {% for x in monthlyAttendanceReport %}
+            <li class="list-group-item">{{x.month|date:"F"}} {{x.month|date:"Y"}}: Total Attendance {{x.tCount}}</li>
+            {% endfor %}
+          </ul>
+    </div>
+  </div>
+
+
+
+
+
+{% endblock %}

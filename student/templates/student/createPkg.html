@@ -5,9 +5,15 @@
 
 
 {% block content %}
+
+
+
+{% if user.is_authenticated %}
+
+
 <br>
 
-<div class="container">
+<div class="container-lg">
 
     <h2>Current Packages createPkg.html</h2>
 
@@ -50,12 +56,27 @@
 </div>
 
 <br>
-<div class="container"> 
+
+{% else %}
+
+<div class="container">
+  <h1>Log In to View this Page</h1>
+  click <a href="{% url 'login' %}">here</a> to login
+</div>
+
+{% endif %}
+
+
+
+
+<div class="container-lg"> 
     
     <h2>Create New Package ? </h2>
+
+    {% if user.is_superuser %}
 </div>
 <br>
-<div class="container">
+<div class="container-lg">
 <button class="btn btn-primary" onclick="myFunction()">New Package</button>
 <br>
 </div>
@@ -78,7 +99,7 @@
     }
     </style>
 
-<div  id="newPKG" class="container">
+<div  id="newPKG" class="container-lg">
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
@@ -88,5 +109,13 @@
          </div>
     </form>
 </div>
+{% else %}
+
+<div class="container">
+  <h3>Kindly contact the admin to create new package</h3>
+  click <a href="{% url 'login' %}">here</a> to login
+</div>
+
+{% endif %}
 
 {% endblock  %}

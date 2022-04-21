@@ -1,6 +1,5 @@
 
-from calendar import month
-from math import fabs
+import django
 from django.shortcuts import redirect, render
 from student.models import customerInfo 
 from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm , followUpForm
@@ -17,6 +16,7 @@ from datetime import date, datetime, timedelta
 from django.utils.timezone import now
 from django.db import connection
 from django.db.models.functions import TruncMonth
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -599,9 +599,29 @@ def dailyReports(request):
 
     return render(request,'student/zupdate.html',context)
 
+## Sutdent Attendacnce report
+
+def studendAttendanceReport(request,pk):
+
+    currDay = date.today()
+
+    studnetName = customerInfo.objects.get(studentId = pk)
+
+    checkInDatebyStudent = checkInData.objects.filter(studentId= pk).values('checkInDate','studentId').order_by('-checkInDate')
+
+    monthlyAttendanceReport = checkInData.objects.filter(studentId= pk).values('checkInDate').annotate(tCount = Count('checkInDate')).order_by('-checkInDate')
+    
+
+    monthlyAttendanceReport = checkInData.objects.filter(studentId= pk).values(month = TruncMonth('checkInDate')).annotate(tCount = Count('checkInDate')).order_by('-month')
+
+    context = {'checkInDatebyStudent':checkInDatebyStudent , 'monthlyAttendanceReport':monthlyAttendanceReport,'studnetName':studnetName}
+
+    return render(request,'student/studentAttendance.html',context)    
+
 
 ## Free Try Out :
 
+@login_required
 def freetryList(request):
 
     anyPkg = AssignPackage.objects.values('StudentId_id')
