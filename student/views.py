@@ -449,7 +449,7 @@ def customerSOA(request,pk):
     if request.method == 'POST':
         fromdate = request.POST['fromdate']
         todate = request.POST['todate']
-        showresult = customerPaymentAccount.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate,studentId=pk)
+        showresult = customerPaymentAccount.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate,studentId=pk).order_by('-transactionDate')
 
         context = {'queryset':queryset,'customerName':customerName,
                'openBalance':openBalance , 'totalCredit':totalCredit , 
@@ -457,7 +457,7 @@ def customerSOA(request,pk):
         #showresult = customerPaymentAccount.objects.raw('select * student_customerspayments where transactionDate >= "'+fromdate+'" and transactionDate <= "'+todate+'" and studentId = %s' ,[pk])
         return render(request,'student/soa.html',context)
     else:
-        showresult = customerPaymentAccount.objects.filter(studentId=pk)
+        showresult = customerPaymentAccount.objects.filter(studentId=pk).order_by('-transactionDate')
         context = {'queryset':queryset,'customerName':customerName,
                'openBalance':openBalance , 'totalCredit':totalCredit ,
                 'totalDebit':totalDebit,'showresult':showresult}
