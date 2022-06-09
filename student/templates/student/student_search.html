@@ -25,7 +25,7 @@
     <tbody>
       <tr>
         <th scope="row"><a href="/student/dashBoard/{{x.studentId}}">{{x.studentId}} </th></a>
-        <td>{{x.customerName}} </td>
+        <td>{{x.customerName}}</td>
         <td>{{x.leadsChannel}}</td>
         <td>{{x.leadsUrgent}}</td>
         <td><button class="btn btn-secondary btn-sm" type="submit" onclick="location.href='{% url 'student:assignPKG' x.studentId %}'">Assign Package</button></td>
@@ -38,6 +38,6 @@
 </div>
 
 {% else %}
-<h1>no search yet</h1>
+<h1>no search yet xx</h1>
 {% endif %}
 {% endblock %}

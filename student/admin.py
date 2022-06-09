@@ -18,6 +18,9 @@ admin.site.register(models.checkInByDateModel)
 admin.site.register(models.customersPayments)
 admin.site.register(models.customerPaymentAccount)
 admin.site.register(models.FollowUpModel)
+admin.site.register(models.checkInByUserModel)
+
+
 
 
 

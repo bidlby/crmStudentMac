@@ -1,0 +1,12 @@
+{% extends 'student/base.html' %}
+{% include 'student/navbar.html'%}
+
+{% block content%}
+
+{% for x in customerfilter %}
+
+<li>{{x.customerName}} <button>check In</button></li>
+
+{% endfor %}
+
+{% endblock %}

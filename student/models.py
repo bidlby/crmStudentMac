@@ -103,7 +103,13 @@ class AssignPackage(models.Model):
 
 ## Payment 
 
+## check In By user (New Method)
 
+class checkInByUserModel(models.Model):
+    checkInSeq = models.AutoField(primary_key=True)
+    studentId = models.ForeignKey(customerInfo,max_length=10,on_delete=models.DO_NOTHING)
+    checkInValue = models.IntegerField(default=1)
+    checkInDate = models.DateField(default=datetime.now)
 
 ### db view
 

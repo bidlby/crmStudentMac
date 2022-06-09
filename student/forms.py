@@ -1,7 +1,7 @@
 
 
 from django import forms
-from .models import customerInfo , checkInData  , studioPackages  , AssignPackage , customersPayments , FollowUpModel
+from .models import checkInByUserModel, customerInfo , checkInData  , studioPackages  , AssignPackage , customersPayments , FollowUpModel
 from django.forms import ChoiceField, ModelForm, Textarea , TextInput 
 from django.contrib.admin.widgets import AdminDateWidget
 from django.contrib.admin import widgets
@@ -144,3 +144,18 @@ class followUpForm(forms.ModelForm):
             'data-target': '#datetimepicker1'}),
             'comments':forms.Textarea(attrs={'class':'form-control'}),
         }
+
+
+class checkInByUserForm(forms.ModelForm):
+    #StudentId = forms.CharField(label=)
+    #customerName = forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    class Meta:
+        model = checkInByUserModel
+        fields = ('studentId','checkInValue')
+        labels = {'studentId':'' }
+        widgets = {
+            'studentId':forms.Textarea(attrs={'hidden':'False'}),
+        }
+
+    def __init__(self,*args, **kwargs):
+        super(checkInByUserForm, self).__init__(*args, **kwargs)

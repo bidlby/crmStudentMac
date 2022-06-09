@@ -64,7 +64,9 @@ urlpatterns = [
     path('list/followUpView/<int:pk>',views.followUpView.as_view(),name='followUpView'),
     path('freetryList/',views.freetryList,name='freetryList'),
     path('py/',views.testAny,name='py'),
-    path('studendAttendanceReport/<int:pk>',views.studendAttendanceReport , name='StudentAttendance')
+    path('studendAttendanceReport/<int:pk>',views.studendAttendanceReport , name='StudentAttendance'),
+    path('checkInSearch',views.checkInSearch , name='checkInSearch'),
+    path('xx/<int:pk>',views.CheckInByName.as_view(),name='CheckInByName'),
 
 
 

@@ -2,15 +2,14 @@
 import django
 from django.shortcuts import redirect, render
 from student.models import customerInfo 
-from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm , followUpForm
+from student.forms import newStudent , newCheckIn , derivePackageform , assignPKGform , PaymentForm , followUpForm , checkInByUserForm
 from django.contrib import messages
 from django.views.generic import DetailView, UpdateView , ListView , TemplateView , CreateView
-from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount , customersPayments ,FollowUpModel
+from .models import customerInfo , checkInData , studioPackages , groupAge , AssignPackage , leadSource , checkInByDateModel , customerPerformance , customerPaymentAccount , customersPayments ,FollowUpModel , checkInByUserModel
 from django.db.models import Count , Max , F , Min , Q , Sum
 from django.db import connection
 from django.urls import reverse, reverse_lazy
 import datetime 
-import time
 from django.shortcuts import get_object_or_404  
 from datetime import date, datetime, timedelta
 from django.utils.timezone import now
@@ -654,3 +653,39 @@ def freetryList(request):
     return render(request,'student/freeTry.html',context)
 
    
+   ## checkInBySearch
+
+   #### Search function ####
+
+def checkInSearch(request):
+    if request.method == "POST":
+        searched = request.POST['checkInSearch']
+        customerfilter = customerInfo.objects.filter(studentId = searched)
+        context = { 'checkInSearch':searched,
+                    'customerfilter':customerfilter }
+        return render(request,'student/checkInSearchResult.html',context)
+    else :
+        return render(request,'student/checkInSearch.html',{})
+
+
+class CheckInByName(CreateView):
+    model = checkInByUserModel
+    form_class = checkInByUserForm
+    #fields = '__all__'
+    template_name = 'student/checkInResultC.html'
+
+    def get_initial(self):
+        StudentId = get_object_or_404(customerInfo, pk=self.kwargs['pk'])
+
+        return {
+        'StudentId': StudentId,
+        }
+
+    def get_context_data(self, **kwargs):
+       context = super(CheckInByName, self).get_context_data(**kwargs)
+       context['queryset'] = customerInfo.objects.filter(pk=self.kwargs['pk'])
+       return context
+
+
+    def get_success_url(self):
+        return reverse('student:home')
